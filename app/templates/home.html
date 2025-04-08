@@ -1,0 +1,11 @@
+{% extends "base.html" %} 
+{% block content %} 
+<div>
+    <div class="container-md">
+      <br>
+      <h1 style="text-align: center" id="points">0</h1>
+      <p style="text-align: center" id="pointsPerSecond"></p>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='scripts/gamelogic.js') }}"></script>
+{% endblock %} 
