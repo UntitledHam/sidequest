@@ -1,8 +1,16 @@
 // Config options
 const targetFrameRate = 144;
 const saveInterval = 5000;
+const numUpdatesForPanic = 300;
 
 const timeStep = 1000/targetFrameRate;
+
+// For the Gameloop:
+let lastTime = null;
+let totalTime = loadTime();
+let timeOfLastSave = 0;
+let accumulatedLag = 0;
+let numberOfUpdates = 0;
 
 // Money:
 let points = 0;
@@ -27,12 +35,6 @@ function saveTime(time) {
   window.localStorage.setItem("total_time", time);
 }
 
-// For the Gameloop:
-let lastTime = null;
-let totalTime = loadTime();
-let timeOfLastSave = 0;
-let accumulatedLag = 0;
-
 // Save the time when the player exits.
 window.addEventListener("beforeunload", () => saveTime(totalTime));
 
@@ -49,9 +51,10 @@ function updateGame(deltaTime, totalTime) {
   }
   points += buildingAPerMS * deltaTime;
   points += buildingBPerMS * deltaTime;
-  // Truncate to 2 decimal places.
-  pointsElement.innerText=points.toFixed(2);
-  pointsPerSecondElement.innerText = `Per second or whatever...`; 
+}
+
+function render() {
+  pointsElement.innerText = points.toFixed(2);
 }
 
 // The gameloop runs ${targetFrameRate} times per second.
@@ -70,6 +73,7 @@ function gameLoop(currentTime) {
     accumulatedLag -= timeStep;
     updateGame(timeStep, totalTime);
   }
+  render();
 
   requestAnimationFrame(gameLoop);
 }
