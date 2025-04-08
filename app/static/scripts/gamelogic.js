@@ -1,7 +1,7 @@
 // Config options
-const targetFrameRate = 144;
+const targetFrameRate = 60;
 const saveInterval = 5000;
-const numUpdatesForPanic = 300;
+const fpsValuesToAverage = 10; 
 
 const timeStep = 1000/targetFrameRate;
 
@@ -11,13 +11,19 @@ let totalTime = loadTime();
 let timeOfLastSave = 0;
 let accumulatedLag = 0;
 let numberOfUpdates = 0;
+let fpsThisFrame = 0;
+let frameCount = 0;
+let totalFPS = 0;
+let fps = targetFrameRate;
 
 // Money:
 let points = 0;
+let oldPoints = 0;
 let pointsElement = document.getElementById("points");
 let pointsPerSecondElement = document.getElementById("pointsPerSecond");
+let fpsCounterElement = document.getElementById("fpsDisplay");
 
-// Building Amounts:
+// Building Amounts (amount per millisecond):
 const buildingAPerMS = 0.001;
 const buildingBPerMS = 0.003;
 
@@ -35,35 +41,25 @@ function saveTime(time) {
   window.localStorage.setItem("total_time", time);
 }
 
-// Save the time when the player exits.
-window.addEventListener("beforeunload", () => saveTime(totalTime));
-
 function saveGame() {
   // Todo: Implement game save functionality.
   console.log("The game has saved.");
 }
 
-function updateGame(deltaTime, totalTime) {
-  const timeSinceLastSave = totalTime - timeOfLastSave;
-  if (timeSinceLastSave >= saveInterval) {
-    saveGame();
-    timeOfLastSave = totalTime;
-  }
-  points += buildingAPerMS * deltaTime;
-  points += buildingBPerMS * deltaTime;
+// Save the time when the player exits.
+window.addEventListener("beforeunload", () => saveTime(totalTime));
+
+
+function getProductionPerMs() {
+  return 0.003;
 }
 
-function render() {
-  pointsElement.innerText = points.toFixed(2);
-}
-
-// The gameloop runs ${targetFrameRate} times per second.
+// The gameloop.
 function gameLoop(currentTime) {
-  // More accurate than Date.now() according to some guy on github.
-  // const currentTime = performance.now();
   if (lastTime === null) {
     lastTime = currentTime;
   }
+  // Get time since the last time run.
   const deltaTime = currentTime - lastTime;
   totalTime += deltaTime;
   accumulatedLag += deltaTime;
@@ -73,10 +69,46 @@ function gameLoop(currentTime) {
     accumulatedLag -= timeStep;
     updateGame(timeStep, totalTime);
   }
-  render();
+  const interp = accumulatedLag / timeStep;
+  fpsThisFrame = 1000 / deltaTime;
+  frameCount++;
+  totalFPS+=fpsThisFrame;
+  if (frameCount >= fpsValuesToAverage) {
+    fps = totalFPS / frameCount;
+    // Stop it from displaying infinity:
+    if (!isFinite(fps)) {
+      fps = targetFrameRate;
+    }
+    totalFPS = 0;
+    frameCount = 0;
+  }
+  render(interp);
 
   requestAnimationFrame(gameLoop);
 }
+
+function updateGame(deltaTime, totalTime) {
+  const timeSinceLastSave = totalTime - timeOfLastSave;
+  if (timeSinceLastSave >= saveInterval) {
+    saveGame();
+    timeOfLastSave = totalTime;
+  }
+  oldPoints = points;
+  points += getProductionPerMs() * deltaTime;
+}
+
+function render(interp) {
+  const interpPoints = lerp(oldPoints, points, interp);
+  pointsElement.innerText = interpPoints.toFixed(1);
+  pointsPerSecondElement.innerText = `${getProductionPerMs() * 1000} per second.`;
+  fpsCounterElement.innerText = `FPS: ${fps.toFixed(1)}`;
+}
+
+function lerp(oldVal, newVal, percentage) {
+  return oldVal * (1 - percentage) + newVal * percentage;
+}
+
+// Start the gameloop.
 requestAnimationFrame(gameLoop);
 
 console.log("Game started.");
