@@ -3,6 +3,8 @@ const targetFrameRate = 60;
 const saveInterval = 5000;
 const fpsValuesToAverage = 10; 
 
+let pointsPerMS = 0;
+
 const timeStep = 1000/targetFrameRate;
 
 // For the Gameloop:
@@ -19,9 +21,12 @@ let fps = targetFrameRate;
 // Money:
 let points = 0;
 let oldPoints = 0;
+
 let pointsElement = document.getElementById("points");
 let pointsPerSecondElement = document.getElementById("pointsPerSecond");
 let fpsCounterElement = document.getElementById("fpsDisplay");
+let buttonElement = document.getElementById("gup");
+buttonElement.addEventListener("click", () => pointsPerMS+= 0.001);
 
 // Building Amounts (amount per millisecond):
 const buildingAPerMS = 0.001;
@@ -51,7 +56,7 @@ window.addEventListener("beforeunload", () => saveTime(totalTime));
 
 
 function getProductionPerMs() {
-  return 0.003;
+  return pointsPerMS;
 }
 
 // The gameloop.
@@ -100,7 +105,7 @@ function updateGame(deltaTime, totalTime) {
 function render(interp) {
   const interpPoints = lerp(oldPoints, points, interp);
   pointsElement.innerText = interpPoints.toFixed(1);
-  pointsPerSecondElement.innerText = `${getProductionPerMs() * 1000} per second.`;
+  pointsPerSecondElement.innerText = `${(getProductionPerMs() * 1000).toFixed(1)} per second.`;
   fpsCounterElement.innerText = `FPS: ${fps.toFixed(1)}`;
 }
 
