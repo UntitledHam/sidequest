@@ -1,4 +1,4 @@
-{% macro building(name, description) %} 
+{% macro building(name, description, amount) %} 
 <a id="gup" class="list-group-item list-group-item-action py-3 lh-sm user-select-none">
   <div class="row"> 
     <div class="col-sm-10">
@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="col-sm-2 fs-1 d-flex align-items-center justify-content-center">
-      <strong id="{{ name }}-amount"></strong>
+      <strong id="{{ name }}-amount">{{ amount }}</strong>
     </div>
   </div>
 </a>

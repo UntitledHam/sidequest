@@ -1,0 +1,10 @@
+{
+  "buildings": {
+    "Skinnerbox": {
+      "amount": 23,
+    },
+    "Gup": {
+      "amount": 2
+    }
+  }
+}

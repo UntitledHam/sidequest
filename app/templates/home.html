@@ -18,7 +18,7 @@
               <div class="list-group list-group-flush border-bottom scrollarea">
                 <!-- Insert list elements here -->
                 {% for building in buildings %}
-                  {{ b.building(building.name, building.description) }}
+                  {{ b.building(building.name, building.description, building.amount) }}
                 {% endfor %}
               </div>
             </div>
