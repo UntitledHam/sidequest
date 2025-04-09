@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="col-sm-2 fs-1 d-flex align-items-center justify-content-center">
-      <strong id="{{ name }}-amount">{{ amount }}</strong>
+      <strong id="{{ name.lower().replace(" ", "-") }}-amount">{{ amount }}</strong>
     </div>
   </div>
 </a>

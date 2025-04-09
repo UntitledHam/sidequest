@@ -22,11 +22,18 @@ let fps = targetFrameRate;
 let points = 0;
 let oldPoints = 0;
 
+let gupCount = 0;
+
 let pointsElement = document.getElementById("points");
 let pointsPerSecondElement = document.getElementById("pointsPerSecond");
 let fpsCounterElement = document.getElementById("fpsDisplay");
 let buttonElement = document.getElementById("gup");
-buttonElement.addEventListener("click", () => pointsPerMS+= 0.001);
+let gupCountElement = document.getElementById("gup-amount");
+buttonElement.addEventListener("click", () => { 
+  gupCount++;
+  pointsPerMS+= 0.001;
+  gupCountElement.innerText = gupCount; 
+});
 
 // Building Amounts (amount per millisecond):
 const buildingAPerMS = 0.001;

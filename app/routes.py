@@ -10,7 +10,7 @@ def index():
         {
             "name": "Gup",
             "description": "A small cat that generates points by purring.",
-            "amount": 23
+            "amount": 0
         },
         {
             "name": "Skinnerbox",
