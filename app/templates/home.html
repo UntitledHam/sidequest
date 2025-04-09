@@ -1,13 +1,31 @@
 {% extends "base.html" %} 
+{% import "building.html" as b %}
 {% block content %} 
 <div>
-  <p id="fpsDisplay"></p>
-    <div class="container-md">
-      <br>
-      <h1 style="text-align: center" id="points">0</h1>
-      <p style="text-align: center" id="pointsPerSecond"></p>
-      <button type="button" id="gup">Click Me!</button> 
+  <div class="container text-center">
+    <div class="row align-items-center">
+      <div class="col">
+        <p id="fpsDisplay"></p>
+      </div>
+      <div class="col">
+        <br>
+        <h1 style="text-align: center" id="points">0</h1>
+        <p style="text-align: center" id="pointsPerSecond"></p>
+      </div>
+      <div class="col">
+        <div class="vstack gap-2 col-md-5 mx-auto">
+            <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary" style="width: 500px;">
+              <div class="list-group list-group-flush border-bottom scrollarea">
+                <!-- Insert list elements here -->
+                {% for building in buildings %}
+                  {{ b.building(building.name, building.description) }}
+                {% endfor %}
+              </div>
+            </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 <script src="{{ url_for('static', filename='scripts/gamelogic.js') }}"></script>
 {% endblock %} 
