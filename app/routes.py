@@ -17,5 +17,10 @@ def index():
             "description": "A box with a small rat that generates points by clicking a button.",
             "amount": 5
         },
+        {
+            "name": "Test",
+            "description": "This is a test, do not mind.",
+            "amount": 0
+        }
     ]
     return render_template("home.html", title="Home", buildings=buildings)
