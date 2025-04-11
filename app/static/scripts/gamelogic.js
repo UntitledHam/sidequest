@@ -1,9 +1,13 @@
+import building from './building.js';
+let testbuilng = building(0);
+
 // Config options
 const targetFrameRate = 60;
 const saveInterval = 5000;
 const fpsValuesToAverage = 10; 
 
 let pointsPerMS = 0;
+let timeSinceLastBox = 500;
 
 const timeStep = 1000/targetFrameRate;
 
@@ -48,12 +52,18 @@ function saveTime(time) {
 
 function saveGame() {
   // Todo: Implement game save functionality.
-  console.log("The game has saved.");
+  console.log("The game has \"saved\".");
 }
 
 // Save the time when the player exits.
 window.addEventListener("beforeunload", () => saveTime(totalTime));
 
+function skinnerBox(){
+  let threshhold = 0.5;
+  let bonus = 1000;
+  if(Math.random()<threshhold)
+    points += bonus;
+}
 
 function getProductionPerMs() {
   return pointsPerMS;
@@ -100,6 +110,13 @@ function updateGame(deltaTime, totalTime) {
   }
   oldPoints = points;
   points += getProductionPerMs() * deltaTime;
+  timeSinceLastBox += deltaTime;
+  if (timeSinceLastBox > 1000){
+    skinnerBox();
+    timeSinceLastBox -= 1000;
+    console.log()
+  }
+
 }
 
 function render(interp) {
