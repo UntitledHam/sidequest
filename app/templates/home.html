@@ -3,55 +3,68 @@
 {% block content %} 
 <div>
   <p id="fpsDisplay"></p>
-  <div class="container text-center">
-    <div class="row align-items-center">
+  <div class="container-fluid text-center">
+    <div class="row">
       <div class="col">
-        <ul class="list-group">
+        <ul class="list-group" style="width:70%">
           <li class="list-group-item">
             <div class="container">
-              <div class="col">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h5 class="mb-1 text-start"><b>History Project</b></h5>
-                  </div>
-                  <div class="col-sm-4">
-                    <strong class="fs-6 text-end fst-italic">Due: 10/12</strong>
-                  </div>
+              <div class="row">
+                <div class="col-sm-8">
+                  <h5 class="mb-1 text-start"><b>History Project</b></h5>
                 </div>
-                <div class="row text-start">
-                  <ul>
-                    <li><small><i><s class="text-secondary-emphasis">Read Textbook Chapters 10-12</s></i></small></li>
-                    <li><small><i><s class="text-secondary-emphasis">Complete research document</s></i></small></li>
-                    <li><small><i><s class="text-secondary-emphasis">Slides Rough Draft</s></i></small></li>
-                    <li><small>Finish Slides</small></li>
-                    <li><small>Present</small></li>
-                  </ul>
+                <div class="col-sm-4">
+                  <strong class="fs-6 text-end fst-italic">Due: 10/12</strong>
                 </div>
+              </div>
+              <div class="row text-start">
+                <ul>
+                  <li><small><i><s class="text-secondary-emphasis">Read Textbook Chapters 10-12</s></i></small></li>
+                  <li><small><i><s class="text-secondary-emphasis">Complete research document</s></i></small></li>
+                  <li><small><i><s class="text-secondary-emphasis">Slides Rough Draft</s></i></small></li>
+                  <li><small>Finish Slides</small></li>
+                  <li><small>Present</small></li>
+                </ul>
               </div>
             </div>
           </li>
-          <li class="list-group-item">Hello World!</li>
         </ul>
       </div>
-      <div class="col">
-        <br>
-        <h1 style="text-align: center" id="points">0</h1>
-        <p style="text-align: center" id="pointsPerSecond"></p>
+      <div class="col align-items-center">
+        <div class="row">
+          <div class="border border-primary-subtle p-3 text-start mx-auto" style="width: 75%">
+            <h3><b>History Project</b></h3>
+            <small class="fs-6">Next up: Finish Slides</small>
+            <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar progress-bar-striped" style="width: 75%"></div>
+            </div>
+            <small>Awards: Placeholder text</small>
+          </div>
+        </div>
+        <!-- We use this to make a gap between the elements -->
+        <div class="row" style="height:15vh;"></div>
+        <div class="row mx-auto" style="width: 50%;">
+          <div class="border border-primary-subtle p-3 text-center mx-auto" style="width: 75%">
+            <h1 class="display-4 fw-bold text-body-emphasis" id="points">0</h1>
+            <p id="pointsPerSecond"></p>
+          </div>
+        </div>
       </div>
       <div class="col">
         <div class="vstack gap-2 col-md-5 mx-auto">
-            <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary" style="width: 500px;">
-              <div class="list-group list-group-flush border-bottom scrollarea">
-                <!-- Insert list elements here -->
-                {% for building in buildings %}
-                  {{ b.building(building.name, building.description, building.amount) }}
-                {% endfor %}
-              </div>
+          <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary" style="width: 170%;">
+            <div class="list-group list-group-flush border-bottom scrollarea">
+              <!-- Insert list elements here -->
+              {% for building in buildings %}
+                {{ b.building(building.name, building.description, building.amount) }}
+              {% endfor %}
             </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  {{toast}}
 </div>
 <script src="{{ url_for('static', filename='scripts/gamelogic.js') }}"></script>
 {% endblock %} 
