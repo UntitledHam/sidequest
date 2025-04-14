@@ -1,0 +1,19 @@
+{
+    "username": "Mythic",
+    "user ID": "0000001",
+    "gameVersion": 0.01,
+    "buildings": {
+        "SkinnerBoxes": {
+            "amount": 12,
+            "Upgrades": {
+                "worse odds": 1
+            }
+        },
+        "monkeys": {
+            "amount": 1,
+            "Upgrades":{
+                "SecondKeyboard": 0
+            }
+        }
+    }
+}

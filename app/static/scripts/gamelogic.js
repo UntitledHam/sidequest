@@ -1,5 +1,9 @@
-import building from './building.js';
-let testbuilng = building(0);
+import {skinnerBox} from './skinnerBox.js';
+import {monkeys} from './monkeys.js';
+import {RPG} from './RPG.js';
+let testBox = new skinnerBox('testBox',1);
+let testMonkey = new monkeys('testMonkey',1);
+let testRPG  = new RPG('testRPG', 1);
 
 // Config options
 const targetFrameRate = 60;
@@ -7,7 +11,6 @@ const saveInterval = 5000;
 const fpsValuesToAverage = 10; 
 
 let pointsPerMS = 0;
-let timeSinceLastBox = 500;
 
 const timeStep = 1000/targetFrameRate;
 
@@ -58,12 +61,6 @@ function saveGame() {
 // Save the time when the player exits.
 window.addEventListener("beforeunload", () => saveTime(totalTime));
 
-function skinnerBox(){
-  let threshhold = 0.5;
-  let bonus = 1000;
-  if(Math.random()<threshhold)
-    points += bonus;
-}
 
 function getProductionPerMs() {
   return pointsPerMS;
@@ -110,14 +107,11 @@ function updateGame(deltaTime, totalTime) {
   }
   oldPoints = points;
   points += getProductionPerMs() * deltaTime;
-  timeSinceLastBox += deltaTime;
-  if (timeSinceLastBox > 1000){
-    skinnerBox();
-    timeSinceLastBox -= 1000;
-    console.log()
-  }
 
-}
+  //points += testBox.update(deltaTime);
+  //points += testMonkey.update(deltaTime);
+  points += testRPG.update(deltaTime);
+  }
 
 function render(interp) {
   const interpPoints = lerp(oldPoints, points, interp);

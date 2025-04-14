@@ -1,9 +1,9 @@
-class building {
-
-    numberOwned;
+export class building {
     
-    constructer(numberOwned){
+    constructor( name, numberOwned){
         this.numberOwned = numberOwned;
+        this.name = name;
+        
     }
 
     buyMore(numberToBuy){
