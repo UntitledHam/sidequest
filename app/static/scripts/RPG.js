@@ -14,7 +14,6 @@ export class RPG extends building {
     update(deltaTime) {
         this.timeOfLastCheck += deltaTime;
         let ans = this.bonus * (-(Math.cos((this.timeOfLastCheck)/this.interval)) + 1);
-        console.log(ans);
         return this.numberOwned * ans;
         }
 

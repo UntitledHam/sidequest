@@ -5,6 +5,10 @@ let testBox = new skinnerBox('testBox',1);
 let testMonkey = new monkeys('testMonkey',1);
 let testRPG  = new RPG('testRPG', 1);
 
+
+const pointsHistory = [];
+const timeHistory = [];
+
 // Config options
 const targetFrameRate = 60;
 const saveInterval = 5000;
@@ -38,6 +42,27 @@ buttonElement.addEventListener("click", () => pointsPerMS+= 0.001);
 // Building Amounts (amount per millisecond):
 const buildingAPerMS = 0.001;
 const buildingBPerMS = 0.003;
+
+function updatePps(deltaTime){
+  let len = pointsHistory.push(points);
+  if (len > 100){
+    pointsHistory.shift();
+  }
+  let len2 = timeHistory.push(deltaTime);
+  if (len2 > 100){
+    timeHistory.shift();
+  }
+  let num = 0;
+  pointsHistory.forEach(element => {
+    num +=element;
+  });
+  let timeSince = 0;
+  timeHistory.forEach(element => {timeSince += element;});
+  console.log(timeSince);
+  pointsPerMS = (num/(timeSince/1000));
+
+  }
+
 
 
 function loadTime() {
@@ -106,10 +131,10 @@ function updateGame(deltaTime, totalTime) {
     timeOfLastSave = totalTime;
   }
   oldPoints = points;
-  points += getProductionPerMs() * deltaTime;
-
-  //points += testBox.update(deltaTime);
-  //points += testMonkey.update(deltaTime);
+  
+  updatePps();
+  points += testBox.update(deltaTime);
+  points += testMonkey.update(deltaTime);
   points += testRPG.update(deltaTime);
   }
 
