@@ -23,4 +23,25 @@ def index():
             "amount": 0
         }
     ]
-    return render_template("home.html", title="Home", buildings=buildings)
+
+    tasks = [
+        {
+            "name": "Test",
+            "due_date": "1/1",
+            "steps": [
+                "test",
+                "test2",
+                "test3"
+            ]
+        },
+        {
+            "name": "History Project",
+            "due_date": "10/12",
+            "steps": [
+                "test1",
+                "test2",
+                "test3"
+            ]
+        }
+    ]
+    return render_template("home.html", title="Home", tasks=tasks, buildings=buildings)
