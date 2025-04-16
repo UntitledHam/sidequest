@@ -168,8 +168,7 @@ function updateGame(deltaTime, totalTime) {
   points += testBox.update(deltaTime);
   points += testMonkey.update(deltaTime);
   points += testRPG.update(deltaTime);
-
-  console.log(points);  
+  
   }
 
 function render(interp) {
