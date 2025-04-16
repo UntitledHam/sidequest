@@ -5,6 +5,8 @@ let testBox = new skinnerBox('testBox',1);
 let testMonkey = new monkeys('testMonkey',1);
 let testRPG  = new RPG('testRPG', 1);
 
+let AbreviationList = ["Error","k","M","B","T","qd","Qn","sx","Sp","O","N","de","Ud","DD","tdD","qdD","QnD","sxD","SpD","OcD","NvD","Vgn","UVg","DVg","TVg","qtV","QnV","SeV","SPG","OVG","NVG","TGN","UTG","DTG","tsTG","qtTG","QnTG","ssTG","SpTG","OcTG","NoTG","QdDR","uQDR","dQDR","tQDR","qdQDR","QnQDR","sxQDR","SpQDR","OQDDr","NQDDr","qQGNT","uQGNT","dQGNT","tQGNT","qdQGNT","QnQGNT","sxQGNT","SpQGNT", "OQQGNT","NQQGNT","SXGNTL"];
+
 
 const pointsHistory = [];
 const timeHistory = [];
@@ -14,7 +16,7 @@ const targetFrameRate = 60;
 const saveInterval = 5000;
 const fpsValuesToAverage = 10; 
 
-let pointsPerMS = 0;
+
 
 const timeStep = 1000/targetFrameRate;
 
@@ -32,6 +34,10 @@ let fps = targetFrameRate;
 // Money:
 let points = 0;
 let oldPoints = 0;
+
+//Money per second Tracking
+let pointsPerMS = 0;
+let oldPointsPerMS = 0;
 
 let pointsElement = document.getElementById("points");
 let pointsPerSecondElement = document.getElementById("pointsPerSecond");
@@ -53,13 +59,32 @@ function updatePps(deltaTime){
     timeHistory.shift();
   }
   let num = 0;
+  let lastElement = pointsHistory[0];
   pointsHistory.forEach(element => {
-    num +=element;
+    num += element - lastElement;
+    lastElement = element;
   });
   let timeSince = 0;
   timeHistory.forEach(element => {timeSince += element;});
-  console.log(timeSince);
-  pointsPerMS = (num/(timeSince/1000));
+  oldPointsPerMS = pointsPerMS;
+  pointsPerMS = (num/(timeSince));
+
+  }
+
+  function numberAbreviation(num){
+    //console.log(num);
+    if (num<1000){
+      return num.toFixed(1);
+    }
+    let truncatedNum = parseFloat(num.toPrecision(4));
+    let expNum = truncatedNum.toExponential();
+    let splitNumArray = expNum.split('e+');
+    //console.log('Start Point');
+    //console.log(splitNumArray[0]);
+    //console.log((10**(splitNumArray[1]%3)));
+    //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))));
+    //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4));
+    return `${(splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4)}${AbreviationList[Math.floor(splitNumArray[1]/3)]}`;
 
   }
 
@@ -132,16 +157,18 @@ function updateGame(deltaTime, totalTime) {
   }
   oldPoints = points;
   
-  updatePps();
+  updatePps(deltaTime);
   points += testBox.update(deltaTime);
   points += testMonkey.update(deltaTime);
   points += testRPG.update(deltaTime);
+  
   }
 
 function render(interp) {
   const interpPoints = lerp(oldPoints, points, interp);
-  pointsElement.innerText = interpPoints.toFixed(1);
-  pointsPerSecondElement.innerText = `${(getProductionPerMs() * 1000).toFixed(1)} per second.`;
+  const interpPPS = lerp(oldPointsPerMS, pointsPerMS, interp);
+  pointsElement.innerText = numberAbreviation(interpPoints);
+  pointsPerSecondElement.innerText = `${numberAbreviation(interpPPS * 1000)} per second.`;
   fpsCounterElement.innerText = `FPS: ${fps.toFixed(1)}`;
 }
 
