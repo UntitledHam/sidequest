@@ -1,0 +1,21 @@
+{% macro task(title, due_date, steps) %} 
+<li class="list-group-item border" id="task-{{title.lower().replace(" ", "-")}}" style="border-radius: 0">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-8">
+        <h5 class="fs-4 fw-bold text-start">{{title}}</h5>
+      </div>
+      <div class="col-sm-4">
+        <p class="fs-6 text-end fst-italic">Due: {{due_date}}</p>
+      </div>
+    </div>
+    <div class="row text-start">
+      <ul>
+        {% for step in steps %}
+        <li><small class="step">{{ step }}</small></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</li>
+{% endmacro %}

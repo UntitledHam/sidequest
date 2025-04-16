@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timezone
-from sqlalchemy import String
+from sqlalchemy import String, JSON
 from sqlalchemy.orm import Mapped, mapped_column
 from typing import Optional
 from flask_login import UserMixin
@@ -17,8 +17,8 @@ class User(UserMixin, db.Model):
     username: Mapped[str] = mapped_column(String(64))
     email: Mapped[str] = mapped_column(String(64))
     password_hash: Mapped[Optional[str]] = mapped_column(String(256))
-    last_seen: Mapped[Optional[datetime]] = mapped_column(
-        default=lambda: datetime.now(timezone.utc))
+    last_seen: Mapped[Optional[datetime]] = mapped_column(default=lambda: datetime.now(timezone.utc))
+    save: Mapped[JSON] = mapped_column(JSON)
 
     def __repr__(self):
         return f"<User {self.username}>"
