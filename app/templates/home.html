@@ -3,8 +3,19 @@
 {% import "task.html" as t %}
 {% block content %} 
 <div>
+  <div id="debugInfo" class="container position-absolute top-0 start-0">
   <p id="fpsDisplay"></p>
+  <p id="loginStatus">Status: 
+  {% if current_user.is_authenticated %}
+  <span style="color:green">logged in</span>
+  {% else %}
+  <span style="color:red">logged out</span>
+  {% endif %}
+  </p>
+  </div>
+
   <div class="container-fluid text-center">
+    <div class="row" style="height:10vh;"></div>
     <div class="row">
       <div class="col">
         <div class="border border-primary-subtle p-3 text-start mx-auto" style="width: 70%">
@@ -50,6 +61,6 @@
   </div>
   {{toast}}
 </div>
-<script type= "module" src="{{ url_for('static', filename='scripts/gamelogic.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='scripts/gamelogic.js') }}"></script>
 <script src="{{ url_for('static', filename='scripts/tasks.js') }}"></script>
 {% endblock %} 

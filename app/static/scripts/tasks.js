@@ -12,10 +12,18 @@ async function fetchJson(url) {
 }
 
 async function sendJson(url, content) {
-
+    const response = await fetch(url, {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(content),
+  });
+  if (!response) {
+    console.error("Failed request.")
+  }
 }
 
-console.log(task.innerText)
+console.log(task.innerText);
+
 for (let step of steps) {
   step.addEventListener("click", () => {
     if (!step.classList.contains("done")) {
@@ -35,6 +43,8 @@ async function main() {
   const test = await fetchJson("https://musicbrainz.org/ws/2/artist/?query=%22Stephanie%20Beatriz%22&fmt=json");
   console.log(test);
   console.log(test["count"]);
+  console.log("Attempting to send the json");
+  sendJson("/test", test);
 
 
   console.log("Loaded Tasks.");
