@@ -104,11 +104,20 @@ def index():
     return render_template("home.html", title="Home", tasks=tasks, buildings=buildings)
 
 
-@app.route("/test", methods=["POST"])
-def test():
-    print("Attempting to recieve JSON.")
+@app.errorhandler(404)
+def error404(e):
+    return render_template("error404.html", title="Page not found.")
+
+
+@app.route("/updatesave", methods=["POST"])
+def updateSave():
+    print("Attempting to recieve save file.")
     data = request.get_json()
-    print(f"Created {data["created"]}")
+    current_user.save = data
 
     return data, 200
 
+
+@app.route("/getsave", methods=["GET", "POST"])
+def getSave():
+    return current_user.save

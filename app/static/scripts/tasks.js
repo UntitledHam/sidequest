@@ -1,28 +1,11 @@
+import { Save } from "./saveUtils.js";
+import { fetchJson } from "./jsonUtils.js";
 const task = document.getElementById("task-test");
 const steps = task.querySelectorAll(".step");
 
 const crossedOutColor = window.getComputedStyle(document.documentElement).getPropertyValue('--bs-tertiary-color');
 const standardColor = window.getComputedStyle(document.documentElement).getPropertyValue('--bs-list-group-color');
 
-
-async function fetchJson(url) {
-  const response = await fetch(url, { method: 'GET' })
-  const data = response.json();
-  return data;
-}
-
-async function sendJson(url, content) {
-    const response = await fetch(url, {
-    method: "POST",
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(content),
-  });
-  if (!response) {
-    console.error("Failed request.")
-  }
-}
-
-console.log(task.innerText);
 
 for (let step of steps) {
   step.addEventListener("click", () => {
@@ -40,13 +23,11 @@ for (let step of steps) {
 }
 
 async function main() {
-  const test = await fetchJson("https://musicbrainz.org/ws/2/artist/?query=%22Stephanie%20Beatriz%22&fmt=json");
-  console.log(test);
-  console.log(test["count"]);
-  console.log("Attempting to send the json");
-  sendJson("/test", test);
+  let save = await Save.loadSave()
+  // console.log(save);
 
-
-  console.log("Loaded Tasks.");
+  // console.log(save.test);
+  console.log(save.data.buildings.gup.amount);
+  
 }
 main();

@@ -1,3 +1,10 @@
 {
-  "test": "Hello World!"
+  "buildings": {
+    "skinnerbox": {
+      "amount": 0
+    },
+    "gup": {
+      "amount": 0
+    }
+  }
 }
