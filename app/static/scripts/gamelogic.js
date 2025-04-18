@@ -134,7 +134,7 @@ async function gameLoop(currentTime) {
   
   while (accumulatedLag >= timeStep) {
     accumulatedLag -= timeStep;
-    await updateGame(timeStep, currentTime);
+    updateGame(timeStep, currentTime);
   }
   const interp = accumulatedLag / timeStep;
   fpsThisFrame = 1000 / deltaTime;
