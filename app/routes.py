@@ -61,8 +61,11 @@ def login():
     return render_template("login.html", title="Log in", form=form)
 
 
+@login_required
 @app.route("/")
 def index():
+    if not current_user.is_authenticated:
+        return redirect(url_for("login"))
     buildings = [
         {
             "name": "Gup",
@@ -113,6 +116,7 @@ def error404(e):
 def updateSave():
     print("Attempting to recieve save file.")
     data = request.get_json()
+    print(data["points"])
     current_user.save = data
     db.session.commit()
 

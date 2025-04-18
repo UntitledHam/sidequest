@@ -17,7 +17,7 @@ const targetFrameRate = 60;
 const saveInterval = 15000;
 const fpsValuesToAverage = 10; 
 
-let save = await Save.loadSave();
+let save;
 
 
 
@@ -112,7 +112,6 @@ async function saveTime(time) {
 }
 
 async function saveGame() {
-  saveTime();
   await save.sendSave();
   console.log("The game has \"saved\".");
 }
@@ -134,7 +133,7 @@ async function gameLoop(currentTime) {
   
   while (accumulatedLag >= timeStep) {
     accumulatedLag -= timeStep;
-    updateGame(timeStep, currentTime);
+    await updateGame(timeStep, currentTime);
   }
   const interp = accumulatedLag / timeStep;
   fpsThisFrame = 1000 / deltaTime;
@@ -160,13 +159,14 @@ async function updateGame(deltaTime, totalTime) {
     await saveGame();
     timeOfLastSave = totalTime;
   }
+
   oldPoints = points;
+  save.data.points = points;  
   
   await updatePps(deltaTime);
   // points += testBox.update(deltaTime);
   // points += testMonkey.update(deltaTime);
   points += testRPG.update(deltaTime);
-  
 }
 
 async function render(interp) {
@@ -181,7 +181,17 @@ async function lerp(oldVal, newVal, percentage) {
   return oldVal * (1 - percentage) + newVal * percentage;
 }
 
-// Start the gameloop.
-requestAnimationFrame(gameLoop);
+async function startup() {
+  save = await Save.loadSave();
+  if (save.data.hasOwnProperty("points")) {
+    console.log("Saved points found.");
+    oldPoints = save.data.points;
+    points = save.data.points;
+  }
+  console.log(points);
+  // Start the gameloop.
+  requestAnimationFrame(gameLoop);
+  console.log("Game started.");
+}
 
-console.log("Game started.");
+startup();
