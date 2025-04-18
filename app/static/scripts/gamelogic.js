@@ -1,11 +1,11 @@
-import {skinnerBox} from './skinnerBox.js';
-import {monkeys} from './monkeys.js';
-import {RPG} from './RPG.js';
-let testBox = new skinnerBox('testBox',1);
-let testMonkey = new monkeys('testMonkey',1);
-let testRPG  = new RPG('testRPG', 1);
+import { skinnerBox } from './skinnerBox.js';
+import { monkeys } from './monkeys.js';
+import { RPG } from './RPG.js';
+let testBox = new skinnerBox('testBox', 1);
+let testMonkey = new monkeys('testMonkey', 1);
+let testRPG = new RPG('testRPG', 1);
 
-let AbreviationList = ["Error","k","M","B","T","qd","Qn","sx","Sp","O","N","de","Ud","DD","tdD","qdD","QnD","sxD","SpD","OcD","NvD","Vgn","UVg","DVg","TVg","qtV","QnV","SeV","SPG","OVG","NVG","TGN","UTG","DTG","tsTG","qtTG","QnTG","ssTG","SpTG","OcTG","NoTG","QdDR","uQDR","dQDR","tQDR","qdQDR","QnQDR","sxQDR","SpQDR","OQDDr","NQDDr","qQGNT","uQGNT","dQGNT","tQGNT","qdQGNT","QnQGNT","sxQGNT","SpQGNT", "OQQGNT","NQQGNT","SXGNTL"];
+let AbreviationList = ["Error", "k", "M", "B", "T", "qd", "Qn", "sx", "Sp", "O", "N", "de", "Ud", "DD", "tdD", "qdD", "QnD", "sxD", "SpD", "OcD", "NvD", "Vgn", "UVg", "DVg", "TVg", "qtV", "QnV", "SeV", "SPG", "OVG", "NVG", "TGN", "UTG", "DTG", "tsTG", "qtTG", "QnTG", "ssTG", "SpTG", "OcTG", "NoTG", "QdDR", "uQDR", "dQDR", "tQDR", "qdQDR", "QnQDR", "sxQDR", "SpQDR", "OQDDr", "NQDDr", "qQGNT", "uQGNT", "dQGNT", "tQGNT", "qdQGNT", "QnQGNT", "sxQGNT", "SpQGNT", "OQQGNT", "NQQGNT", "SXGNTL"];
 
 
 const pointsHistory = [];
@@ -14,11 +14,11 @@ const timeHistory = [];
 // Config options
 const targetFrameRate = 60;
 const saveInterval = 5000;
-const fpsValuesToAverage = 10; 
+const fpsValuesToAverage = 10;
 
 
 
-const timeStep = 1000/targetFrameRate;
+const timeStep = 1000 / targetFrameRate;
 
 // For the Gameloop:
 let lastTime = null;
@@ -46,23 +46,23 @@ let pointsPerSecondElement = document.getElementById("pointsPerSecond");
 let fpsCounterElement = document.getElementById("fpsDisplay");
 let buttonElement = document.getElementById("gup");
 let gupCountElement = document.getElementById("gup-amount");
-buttonElement.addEventListener("click", () => { 
+buttonElement.addEventListener("click", () => {
   gupCount++;
-  pointsPerMS+= 0.001;
-  gupCountElement.innerText = gupCount; 
+  pointsPerMS += 0.001;
+  gupCountElement.innerText = gupCount;
 });
 
 // Building Amounts (amount per millisecond):
 const buildingAPerMS = 0.001;
 const buildingBPerMS = 0.003;
 
-function updatePps(deltaTime){
+function updatePps(deltaTime) {
   let len = pointsHistory.push(points);
-  if (len > 100){
+  if (len > 100) {
     pointsHistory.shift();
   }
   let len2 = timeHistory.push(deltaTime);
-  if (len2 > 100){
+  if (len2 > 100) {
     timeHistory.shift();
   }
   let num = 0;
@@ -72,28 +72,28 @@ function updatePps(deltaTime){
     lastElement = element;
   });
   let timeSince = 0;
-  timeHistory.forEach(element => {timeSince += element;});
+  timeHistory.forEach(element => { timeSince += element; });
   oldPointsPerMS = pointsPerMS;
-  pointsPerMS = (num/(timeSince));
+  pointsPerMS = (num / (timeSince));
 
+}
+
+function numberAbreviation(num) {
+  //console.log(num);
+  if (num < 1000) {
+    return num.toFixed(1);
   }
+  let truncatedNum = parseFloat(num.toPrecision(4));
+  let expNum = truncatedNum.toExponential();
+  let splitNumArray = expNum.split('e+');
+  //console.log('Start Point');
+  //console.log(splitNumArray[0]);
+  //console.log((10**(splitNumArray[1]%3)));
+  //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))));
+  //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4));
+  return `${(splitNumArray[0] * (10 ** (splitNumArray[1] % 3))).toPrecision(4)}${AbreviationList[Math.floor(splitNumArray[1] / 3)]}`;
 
-  function numberAbreviation(num){
-    //console.log(num);
-    if (num<1000){
-      return num.toFixed(1);
-    }
-    let truncatedNum = parseFloat(num.toPrecision(4));
-    let expNum = truncatedNum.toExponential();
-    let splitNumArray = expNum.split('e+');
-    //console.log('Start Point');
-    //console.log(splitNumArray[0]);
-    //console.log((10**(splitNumArray[1]%3)));
-    //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))));
-    //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4));
-    return `${(splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4)}${AbreviationList[Math.floor(splitNumArray[1]/3)]}`;
-
-  }
+}
 
 
 
@@ -102,7 +102,7 @@ function loadTime() {
 
   if (time) {
     return parseFloat(time);
-  } 
+  }
   return 0;
 }
 
@@ -133,7 +133,7 @@ function gameLoop(currentTime) {
   totalTime += deltaTime;
   accumulatedLag += deltaTime;
   lastTime = currentTime;
-  
+
   while (accumulatedLag >= timeStep) {
     accumulatedLag -= timeStep;
     updateGame(timeStep, totalTime);
@@ -141,7 +141,7 @@ function gameLoop(currentTime) {
   const interp = accumulatedLag / timeStep;
   fpsThisFrame = 1000 / deltaTime;
   frameCount++;
-  totalFPS+=fpsThisFrame;
+  totalFPS += fpsThisFrame;
   if (frameCount >= fpsValuesToAverage) {
     fps = totalFPS / frameCount;
     // Stop it from displaying infinity:
@@ -163,13 +163,13 @@ function updateGame(deltaTime, totalTime) {
     timeOfLastSave = totalTime;
   }
   oldPoints = points;
-  
+
   updatePps(deltaTime);
   points += testBox.update(deltaTime);
   points += testMonkey.update(deltaTime);
   points += testRPG.update(deltaTime);
-  
-  }
+
+}
 
 function render(interp) {
   const interpPoints = lerp(oldPoints, points, interp);

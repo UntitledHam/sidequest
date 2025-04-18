@@ -10,6 +10,7 @@ export class RPG extends building {
     }
 
     getChange(time,delta){
+        //This is the integral of a sine function over time. Its complicated but it should respond to deltatime correctly. 
         let currentValue = Math.cos(((2 * Math.PI)*(time+delta)/this.interval));
         let lastValue = Math.cos(((2 * Math.PI)*(time)/this.interval));
         return this.bonus * (delta-((currentValue - lastValue)*(this.interval/(2*Math.PI))));
