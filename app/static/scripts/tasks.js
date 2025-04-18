@@ -1,4 +1,4 @@
-import { Save } from "./saveUtils.js";
+import { Save } from "./save.js";
 import { fetchJson } from "./jsonUtils.js";
 const task = document.getElementById("task-test");
 const steps = task.querySelectorAll(".step");
@@ -22,12 +22,3 @@ for (let step of steps) {
   });
 }
 
-async function main() {
-  let save = await Save.loadSave()
-  // console.log(save);
-
-  // console.log(save.test);
-  console.log(save.data.buildings.gup.amount);
-  
-}
-main();

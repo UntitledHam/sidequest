@@ -1,7 +1,7 @@
 export async function fetchJson(url) {
   const response = await fetch(url, { method: 'GET' })
   if (!response) {
-    console.error("Failed request.");
+    throw new Error("Request had no response.")
   }
   else {
     const data = response.json();

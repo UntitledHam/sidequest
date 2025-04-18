@@ -114,6 +114,7 @@ def updateSave():
     print("Attempting to recieve save file.")
     data = request.get_json()
     current_user.save = data
+    db.session.commit()
 
     return data, 200
 
