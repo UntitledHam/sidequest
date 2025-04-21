@@ -147,7 +147,6 @@ async function gameLoop(currentTime) {
 
 async function updateBuildings(deltaTime) {
   for (let building of buildings.values()) {
-    console.log(building);
     points += building.update(deltaTime);
   }
 }
