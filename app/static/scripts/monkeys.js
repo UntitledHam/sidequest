@@ -1,27 +1,26 @@
-import {building} from './building.js';
-export class monkeys extends building {
+import { building } from "./building.js";
+export class monkey extends building {
+  constructor(numberOwned) {
+    super("monkey", numberOwned);
+    this.timeSinceLastWord = 0;
+    this.threshhold = 0.9;
+    this.bonus = 700;
+    this.interval = 100;
+  }
 
-    constructor(name,numberOwned) {
-        super(name, numberOwned);
-        this.timeSinceLastWord = 0;
-        this.threshhold = 0.9;
-        this.bonus = 700;
-        this.interval = 100;
+  update(deltaTime) {
+    if (this.numberOwned == 0) {
+      return 0;
     }
 
+    this.timeSinceLastWord += deltaTime;
 
-
-    update(deltaTime) {
-        this.timeSinceLastWord += deltaTime;
-
-        if ((this.timeSinceLastWord > this.interval) && (Math.random() < this.threshhold)) {
-            this.timeSinceLastWord -= this.interval;
-            return this.bonus * this.numberOwned;
-        }
-        else {
-            return 0;
-        }
-
+    if (this.timeSinceLastWord > this.interval && Math.random() < this.threshhold) {
+      this.timeSinceLastWord -= this.interval;
+      return this.bonus * this.numberOwned;
     }
-
+    else {
+      return 0;
+    }
+  }
 }

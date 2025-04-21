@@ -1,10 +1,11 @@
 import {skinnerBox} from './skinnerBox.js';
 import { Save } from "./save.js";
-import {monkeys} from './monkeys.js';
+import {monkey} from './monkeys.js';
 import {RPG} from './RPG.js';
-let testBox = new skinnerBox('testBox',1);
-let testMonkey = new monkeys('testMonkey',1);
-let testRPG  = new RPG('testRPG', 1);
+
+
+let buildings = new Map();
+
 
 let AbreviationList = ["Error","k","M","B","T","qd","Qn","sx","Sp","O","N","de","Ud","DD","tdD","qdD","QnD","sxD","SpD","OcD","NvD","Vgn","UVg","DVg","TVg","qtV","QnV","SeV","SPG","OVG","NVG","TGN","UTG","DTG","tsTG","qtTG","QnTG","ssTG","SpTG","OcTG","NoTG","QdDR","uQDR","dQDR","tQDR","qdQDR","QnQDR","sxQDR","SpQDR","OQDDr","NQDDr","qQGNT","uQGNT","dQGNT","tQGNT","qdQGNT","QnQGNT","sxQGNT","SpQGNT", "OQQGNT","NQQGNT","SXGNTL"];
 
@@ -29,7 +30,6 @@ let lastTime = null;
 let totalTime = loadTime();
 let timeOfLastSave = 0;
 let accumulatedLag = 0;
-let numberOfUpdates = 0;
 let fpsThisFrame = 0;
 let frameCount = 0;
 let totalFPS = 0;
@@ -39,7 +39,6 @@ let fps = targetFrameRate;
 let points = 0;
 let oldPoints = 0;
 
-let gupCount = 0;
 
 //Money per second Tracking
 let pointsPerMS = 0;
@@ -50,13 +49,6 @@ let pointsPerSecondElement = document.getElementById("pointsPerSecond");
 let fpsCounterElement = document.getElementById("fpsDisplay");
 let buttonElement = document.getElementById("gup");
 let gupCountElement = document.getElementById("gup-amount");
-
-buttonElement.addEventListener("click", () => { 
-  gupCount++;
-  pointsPerMS+= 0.001;
-  gupCountElement.innerText = gupCount; 
-});
-
 
 async function updatePps(deltaTime){
   let len = pointsHistory.push(points);
@@ -153,6 +145,13 @@ async function gameLoop(currentTime) {
   requestAnimationFrame(gameLoop);
 }
 
+async function updateBuildings(deltaTime) {
+  for (let building of buildings.values()) {
+    console.log(building);
+    points += building.update(deltaTime);
+  }
+}
+
 async function updateGame(deltaTime, totalTime) {
   const timeSinceLastSave = totalTime - timeOfLastSave;
   if (timeSinceLastSave >= saveInterval) {
@@ -166,7 +165,9 @@ async function updateGame(deltaTime, totalTime) {
   await updatePps(deltaTime);
   // points += testBox.update(deltaTime);
   // points += testMonkey.update(deltaTime);
-  points += testRPG.update(deltaTime);
+  // points += rpg.update(deltaTime);
+  // console.log(points);
+  await updateBuildings(deltaTime);
 }
 
 async function render(interp) {
@@ -181,14 +182,35 @@ async function lerp(oldVal, newVal, percentage) {
   return oldVal * (1 - percentage) + newVal * percentage;
 }
 
-async function startup() {
+async function loadSave() {
   save = await Save.loadSave();
   if (save.data.hasOwnProperty("points")) {
     console.log("Saved points found.");
     oldPoints = save.data.points;
     points = save.data.points;
   }
-  console.log(points);
+  else {
+    points = 0;
+  }
+  const buildingKeys = ["skinnerbox", "monkey", "rpg"]
+  
+  if (!save.data.hasOwnProperty("buildings")) { save.data.buildings = {}; }
+  buildingKeys.forEach(buildingKey => {
+    if (!save.data.buildings.hasOwnProperty(buildingKey)) {
+      save.data.buildings[buildingKey] = {"amount": 0}
+    }
+  });
+
+  buildings.set("skinnerbox", new skinnerBox(save.data.buildings.skinnerbox.amount));
+  buildings.set("monkey", new monkey(save.data.buildings.monkey.amount));
+  buildings.set("rpg", new RPG(save.data.buildings.rpg.amount));
+
+  buildings.get("rpg").setNumOwned(1);
+}
+
+async function startup() {
+  // Load the save
+  await loadSave();
   // Start the gameloop.
   requestAnimationFrame(gameLoop);
   console.log("Game started.");

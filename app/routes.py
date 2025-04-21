@@ -10,8 +10,7 @@ from app.forms import Login, Register
 
 
 def generate_new_save():
-    with open("empty_save.json", "r") as f:
-        return json.load(f)
+    return json.loads("{}")
 
 
 @app.before_request
