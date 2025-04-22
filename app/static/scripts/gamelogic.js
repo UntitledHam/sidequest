@@ -181,6 +181,21 @@ async function lerp(oldVal, newVal, percentage) {
   return oldVal * (1 - percentage) + newVal * percentage;
 }
 
+async function setBuildingCount(buildingKey, count) {
+  const building = buildings.get(buildingKey);
+  building.setNumOwned(count);
+  save.data.buildings[buildingKey].amount = count;
+}
+
+async function buyBuilding(buildingKey) {
+  const building = buildings.get(buildingKey);
+  const cost = building.calculateCost();
+  if (points >= cost) {
+    points -= cost;
+    setBuildingCount(building.getNumOwned()+1);
+  }
+}
+
 async function loadSave() {
   save = await Save.loadSave();
   if (save.data.hasOwnProperty("points")) {
@@ -200,11 +215,9 @@ async function loadSave() {
     }
   });
 
-  buildings.set("skinnerbox", new skinnerBox(save.data.buildings.skinnerbox.amount));
-  buildings.set("monkey", new monkey(save.data.buildings.monkey.amount));
-  buildings.set("rpg", new RPG(save.data.buildings.rpg.amount));
-
-  buildings.get("rpg").setNumOwned(1);
+  buildings.set("skinnerbox", new skinnerBox(save.data.buildings.skinnerbox.amount, 1));
+  buildings.set("monkey", new monkey(save.data.buildings.monkey.amount, 100));
+  buildings.set("rpg", new RPG(save.data.buildings.rpg.amount, 500));
 }
 
 async function startup() {

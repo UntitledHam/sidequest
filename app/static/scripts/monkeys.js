@@ -1,7 +1,7 @@
 import { building } from "./building.js";
 export class monkey extends building {
-  constructor(numberOwned) {
-    super("monkey", numberOwned);
+  constructor(numberOwned, baseCost) {
+    super("monkey", numberOwned, baseCost);
     this.timeSinceLastWord = 0;
     this.threshhold = 0.9;
     this.bonus = 700;

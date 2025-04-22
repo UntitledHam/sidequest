@@ -1,7 +1,7 @@
 import { building } from "./building.js";
 export class RPG extends building {
-  constructor(numberOwned) {
-    super("rpg", numberOwned);
+  constructor(numberOwned, baseCost) {
+    super("rpg", numberOwned, baseCost);
     this.timeOfLastCheck = 0;
     this.threshhold = 1;
     this.bonus = 1000;

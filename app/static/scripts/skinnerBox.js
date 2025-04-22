@@ -1,7 +1,7 @@
 import { building } from "./building.js";
 export class skinnerBox extends building {
-  constructor(numberOwned) {
-    super("skinnerbox", numberOwned);
+  constructor(numberOwned, baseCost) {
+    super("skinnerbox", numberOwned, baseCost);
     this.numberOwned = numberOwned;
     this.timeSinceLastBox = 0;
     this.threshhold = 0.5;

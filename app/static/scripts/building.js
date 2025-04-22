@@ -1,7 +1,8 @@
 export class building {
-  constructor(name, numberOwned) {
+  constructor(name, numberOwned, baseCost) {
     this.numberOwned = numberOwned;
     this.name = name;
+    this.baseCost = baseCost;
   }
 
   buyMore(numberToBuy) {
@@ -14,5 +15,9 @@ export class building {
 
   setNumOwned(newNumberOwned) {
     this.numberOwned = newNumberOwned;
+  }
+
+  calculateCost() {
+    return this.baseCost * Math.pow(1.15, this.numberOwned);
   }
 }
