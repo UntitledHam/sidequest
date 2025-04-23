@@ -7,6 +7,6 @@ export class simpleBuilding extends building {
   }
   
   update(deltaTime) {
-    return deltaTime * this.amountPerMs
+    return this.numberOwned * deltaTime * this.amountPerMs
   }
 }
