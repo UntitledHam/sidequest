@@ -41,6 +41,8 @@ let fps = targetFrameRate;
 // Money:
 let points = 0;
 let oldPoints = 0;
+let totalPoints = 0;
+
 
 
 //Money per second Tracking
@@ -52,7 +54,7 @@ let pointsPerSecondElement = document.getElementById("pointsPerSecond");
 let fpsCounterElement = document.getElementById("fpsDisplay");
 
 async function updatePps(deltaTime){
-  let len = pointsHistory.push(points);
+  let len = pointsHistory.push(totalpoints);
   if (len > 100){
     await pointsHistory.shift();
   }
@@ -148,7 +150,10 @@ async function gameLoop(currentTime) {
 
 async function updateBuildings(deltaTime) {
   for (let building of buildings.values()) {
-    points += building.update(deltaTime);
+   deltaPoints = building.update(deltaTime);
+   points += deltaPoints;
+   totalPointspoints += deltaPoints;
+    
   }
 }
 
@@ -160,7 +165,8 @@ async function updateGame(deltaTime, totalTime) {
   }
 
   oldPoints = points;
-  save.data.points = points;  
+  save.data.points = points;
+  save.data.totalPoints = totalPoints;  
   
   await updatePps(deltaTime);
   // points += testBox.update(deltaTime);
@@ -210,6 +216,12 @@ async function loadSave() {
     console.log("Saved points found.");
     oldPoints = save.data.points;
     points = save.data.points;
+    if(save.data.hasOwnProperty("totalPoints")){
+    totalPoints = save.data.totalPoints;
+    }
+    else{
+      totalPoints = save.data.points;
+    }
   }
   else {
     points = 0;
