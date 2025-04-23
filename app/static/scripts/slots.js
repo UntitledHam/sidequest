@@ -16,7 +16,7 @@ export class slots extends building {
         this.timeSinceLastBox += deltaTime;
 
         if (this.timeSinceLastBox > this.interval) {
-            this.timeSinceLastBox -= this;
+            this.timeSinceLastBox -= this.interval;
             if (Math.random() < this.threshhold) {
 
                 return this.bonus * this.numberOwned;

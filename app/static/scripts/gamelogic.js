@@ -54,7 +54,7 @@ let pointsPerSecondElement = document.getElementById("pointsPerSecond");
 let fpsCounterElement = document.getElementById("fpsDisplay");
 
 async function updatePps(deltaTime){
-  let len = pointsHistory.push(totalpoints);
+  let len = pointsHistory.push(totalPoints);
   if (len > 100){
     await pointsHistory.shift();
   }
@@ -150,10 +150,9 @@ async function gameLoop(currentTime) {
 
 async function updateBuildings(deltaTime) {
   for (let building of buildings.values()) {
-   deltaPoints = building.update(deltaTime);
+   let deltaPoints = building.update(deltaTime);
    points += deltaPoints;
-   totalPointspoints += deltaPoints;
-    
+   totalPoints += deltaPoints;
   }
 }
 
@@ -224,7 +223,8 @@ async function loadSave() {
     }
   }
   else {
-    points = 0;
+    points = 100;
+    totalPoints = 100;
   }
   const buildingKeys = ["gup", "skinnerbox", "monkey", "rpg"]
   
