@@ -44,8 +44,8 @@
         <div class="border border-primary-subtle p-3 text-start mx-auto" style="width: 70%">
           <div class="list-group scrollarea mx-auto" style="width:100%;">
             <!-- Insert list elements here -->
-            {% for building in buildings %}
-              {{ b.building(building.name, building.description, building.amount) }}
+            {% for building in buildings.values() %}
+              {{ b.building(building.name, building.description) }}
             {% endfor %}
           </div>
         </div>

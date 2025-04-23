@@ -2,7 +2,10 @@ import {skinnerBox} from './skinnerBox.js';
 import { Save } from "./save.js";
 import {monkey} from './monkeys.js';
 import {RPG} from './RPG.js';
+import { building } from './building.js';
+import { fetchJson } from './jsonUtils.js';
 
+let buildingJson;
 
 let buildings = new Map();
 
@@ -206,7 +209,7 @@ async function loadSave() {
   else {
     points = 0;
   }
-  const buildingKeys = ["skinnerbox", "monkey", "rpg"]
+  const buildingKeys = ["gup", "skinnerbox", "monkey", "rpg"]
   
   if (!save.data.hasOwnProperty("buildings")) { save.data.buildings = {}; }
   buildingKeys.forEach(buildingKey => {
@@ -218,10 +221,22 @@ async function loadSave() {
   buildings.set("skinnerbox", new skinnerBox(save.data.buildings.skinnerbox.amount, 1));
   buildings.set("monkey", new monkey(save.data.buildings.monkey.amount, 100));
   buildings.set("rpg", new RPG(save.data.buildings.rpg.amount, 500));
+  await loadBuildingCounts();
+}
+
+async function loadBuildingCounts() {
+  const buildingElements = document.querySelectorAll(".building");
+
+  buildingElements.forEach(element => {
+    const amountElement = element.querySelector(".building-amount")
+    const buildingId = element.getAttribute("id");
+    amountElement.innerText = save.data.buildings[buildingId].amount;
+  });
 }
 
 async function startup() {
   // Load the save
+  buildingJson = await fetchJson("/getbuildingjson")
   await loadSave();
   // Start the gameloop.
   requestAnimationFrame(gameLoop);

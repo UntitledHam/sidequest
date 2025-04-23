@@ -1,0 +1,26 @@
+{
+  "skinnerbox": {
+    "name": "Skinnerbox",
+    "description": "A box with a small rat that periodically generates satisfaction by clicking a button.",
+    "complexDescription": "10% chance every second to generate 1 satisfaction.",
+    "baseCost": 1
+  },
+  "gup": {
+    "name": "Gup",
+    "description": "A small cat that generates satisfaction by purring.",
+    "complexDescription": "Generates 1 satisfaction per second.",
+    "baseCost": 100
+  },
+  "monkey": {
+    "name": "Monkey",
+    "description": "A monkey with a typewriter.", 
+    "complexDescription": "todo",
+    "baseCost": 1000
+  },
+  "rpg": {
+    "name": "RPG",
+    "description": "An RPG or something idk",
+    "complexDescription": "todo",
+    "baseCost": 5000
+  }
+}
