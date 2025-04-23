@@ -50,8 +50,6 @@ let oldPointsPerMS = 0;
 let pointsElement = document.getElementById("points");
 let pointsPerSecondElement = document.getElementById("pointsPerSecond");
 let fpsCounterElement = document.getElementById("fpsDisplay");
-let buttonElement = document.getElementById("gup");
-let gupCountElement = document.getElementById("gup-amount");
 
 async function updatePps(deltaTime){
   let len = pointsHistory.push(points);
@@ -185,20 +183,24 @@ async function lerp(oldVal, newVal, percentage) {
 }
 
 async function setBuildingCount(buildingKey, count) {
+  console.log(`Changing building count of ${buildingKey} to ${count}`)
   const building = buildings.get(buildingKey);
   building.setNumOwned(count);
   save.data.buildings[buildingKey].amount = count;
-  let buildingElement = document.getElementById("gup");
+  let buildingElement = document.getElementById(buildingKey);
   let amountElement = buildingElement.querySelector(".building-amount");
+  let costElement = buildingElement.querySelector(".building-cost");
   amountElement.innerText = count;
+  costElement.innerText = building.calculateCost();
 }
 
 async function buyBuilding(buildingKey) {
+  console.log(`Buying building: ${buildingKey}`)
   const building = buildings.get(buildingKey);
   const cost = building.calculateCost();
   if (points >= cost) {
     points -= cost;
-    setBuildingCount(building.getNumOwned()+1);
+    setBuildingCount(buildingKey, building.getNumOwned()+1);
   }
 }
 
@@ -234,7 +236,10 @@ async function loadBuildingCounts() {
   buildingElements.forEach(element => {
     const amountElement = element.querySelector(".building-amount")
     const buildingId = element.getAttribute("id");
+    const costElement = element.querySelector(".building-cost")
     amountElement.innerText = save.data.buildings[buildingId].amount;
+    costElement.innerText = buildings.get(buildingId).calculateCost();
+    element.addEventListener("click", async () => await buyBuilding(buildingId));
   });
 }
 
@@ -242,6 +247,7 @@ async function startup() {
   // Load the save
   buildingJson = await fetchJson("/getbuildingjson")
   await loadSave();
+  points = 100;
   // Start the gameloop.
   requestAnimationFrame(gameLoop);
   console.log("Game started.");

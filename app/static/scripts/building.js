@@ -18,6 +18,6 @@ export class building {
   }
 
   calculateCost() {
-    return this.baseCost * Math.pow(1.15, this.numberOwned);
+    return Math.floor(this.baseCost * Math.pow(1.15, this.numberOwned));
   }
 }

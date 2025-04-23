@@ -4,8 +4,8 @@ export class skinnerBox extends building {
     super("skinnerbox", numberOwned, baseCost);
     this.numberOwned = numberOwned;
     this.timeSinceLastBox = 0;
-    this.threshhold = 0.5;
-    this.bonus = 1000;
+    this.threshhold = 0.9;
+    this.bonus = 0.001;
     this.interval = 1000;
   }
 
