@@ -247,7 +247,6 @@ async function startup() {
   // Load the save
   buildingJson = await fetchJson("/getbuildingjson")
   await loadSave();
-  points = 100;
   // Start the gameloop.
   requestAnimationFrame(gameLoop);
   console.log("Game started.");
