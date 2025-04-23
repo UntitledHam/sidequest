@@ -2,8 +2,8 @@ import {skinnerBox} from './skinnerBox.js';
 import { Save } from "./save.js";
 import {monkey} from './monkeys.js';
 import {RPG} from './RPG.js';
-import { building } from './building.js';
 import { fetchJson } from './jsonUtils.js';
+import { gup } from './gup.js';
 
 let buildingJson;
 
@@ -188,6 +188,9 @@ async function setBuildingCount(buildingKey, count) {
   const building = buildings.get(buildingKey);
   building.setNumOwned(count);
   save.data.buildings[buildingKey].amount = count;
+  let buildingElement = document.getElementById("gup");
+  let amountElement = buildingElement.querySelector(".building-amount");
+  amountElement.innerText = count;
 }
 
 async function buyBuilding(buildingKey) {
@@ -218,9 +221,10 @@ async function loadSave() {
     }
   });
 
-  buildings.set("skinnerbox", new skinnerBox(save.data.buildings.skinnerbox.amount, 1));
-  buildings.set("monkey", new monkey(save.data.buildings.monkey.amount, 100));
-  buildings.set("rpg", new RPG(save.data.buildings.rpg.amount, 500));
+  buildings.set("skinnerbox", new skinnerBox(save.data.buildings.skinnerbox.amount, buildingJson.skinnerbox.baseCost));
+  buildings.set("gup", new gup(save.data.buildings.gup.amount, buildingJson.gup.baseCost));
+  buildings.set("monkey", new monkey(save.data.buildings.monkey.amount, buildingJson.monkey.baseCost));
+  buildings.set("rpg", new RPG(save.data.buildings.rpg.amount, buildingJson.rpg.baseCost));
   await loadBuildingCounts();
 }
 
