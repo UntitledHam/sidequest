@@ -74,7 +74,7 @@ async function updatePps(deltaTime){
   pointsPerMS = (num/(timeSince));
 }
 
-async function numberAbreviation(num){
+function numberAbreviation(num){
   //console.log(num);
   if (num<1000){
     return num.toFixed(1);
@@ -250,7 +250,7 @@ async function loadBuildingCounts() {
     const buildingId = element.getAttribute("id");
     const costElement = element.querySelector(".building-cost")
     amountElement.innerText = save.data.buildings[buildingId].amount;
-    costElement.innerText = buildings.get(buildingId).calculateCost();
+    costElement.innerText = numberAbreviation(buildings.get(buildingId).calculateCost());
     element.addEventListener("click", async () => await buyBuilding(buildingId));
   });
 }
