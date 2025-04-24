@@ -181,7 +181,7 @@
   --bs-body-bg-rgb: 30, 30, 46;
   --bs-emphasis-color: #cba6f7;
   --bs-emphasis-color-rgb: 203, 166, 247;
-  --bs-secondary-color: #89dceb;
+  --bs-secondary-color: #f38ba8;
   --bs-secondary-color-rgb: 137, 220, 235;
   --bs-secondary-bg: #313244;
   --bs-secondary-bg-rgb: 49, 50, 68
@@ -229,3 +229,12 @@
   --bs-form-invalid-border-color: #f38ba8;
   --cost: #f9e2af
 ; }
+
+.btn {
+  border-color: #fab387 !important;
+  border-width: 4px !important;
+  border-radius: 0px !important; }
+
+.btn[disabled] {
+  background-color: #11111b !important;
+  border-color: #f38ba8 !important; }

@@ -156,6 +156,19 @@ async function updateBuildings(deltaTime) {
   }
 }
 
+async function lockBuildings() {
+  for (let [key, building] of buildings) {
+    // If your'e a broke boy just say so.
+    if (building.getCost() > points) {
+      document.getElementById(key).disabled = true;
+    }
+    // Nah, i aint broke...
+    else {
+      document.getElementById(key).disabled = false;
+    }
+  }
+}
+
 async function updateGame(deltaTime, totalTime) {
   const timeSinceLastSave = totalTime - timeOfLastSave;
   if (timeSinceLastSave >= saveInterval) {
@@ -181,6 +194,7 @@ async function render(interp) {
   pointsElement.innerText = await numberAbreviation(interpPoints);
   pointsPerSecondElement.innerText = `${await numberAbreviation(interpPPS * 1000)} per second.`;
   fpsCounterElement.innerText = `FPS: ${fps.toFixed(1)}`;
+  lockBuildings();
 }
 
 async function lerp(oldVal, newVal, percentage) {
@@ -196,13 +210,14 @@ async function setBuildingCount(buildingKey, count) {
   let amountElement = buildingElement.querySelector(".building-amount");
   let costElement = buildingElement.querySelector(".building-cost");
   amountElement.innerText = count;
-  costElement.innerHTML = `<span style="color: var(--cost)">Cost:</span> ${numberAbreviation(buildings.get(buildingKey).calculateCost())}`;
+  let cost = buildings.get(buildingKey).getCost();
+  costElement.innerHTML = `<span style="color: var(--cost)">Cost:</span> ${numberAbreviation(cost)}`;
 }
 
 async function buyBuilding(buildingKey) {
   console.log(`Buying building: ${buildingKey}`)
   const building = buildings.get(buildingKey);
-  const cost = building.calculateCost();
+  const cost = building.getCost();
   if (points >= cost) {
     points -= cost;
     setBuildingCount(buildingKey, building.getNumOwned()+1);

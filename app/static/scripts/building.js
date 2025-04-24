@@ -3,6 +3,7 @@ export class building {
     this.numberOwned = numberOwned;
     this.name = name;
     this.baseCost = baseCost;
+    this.cost = this.calculateCost();
   }
 
   buyMore(numberToBuy) {
@@ -15,6 +16,11 @@ export class building {
 
   setNumOwned(newNumberOwned) {
     this.numberOwned = newNumberOwned;
+    this.cost = this.calculateCost();
+  }
+
+  getCost() {
+    return this.cost;
   }
 
   calculateCost() {
