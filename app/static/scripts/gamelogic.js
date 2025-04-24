@@ -196,7 +196,7 @@ async function setBuildingCount(buildingKey, count) {
   let amountElement = buildingElement.querySelector(".building-amount");
   let costElement = buildingElement.querySelector(".building-cost");
   amountElement.innerText = count;
-  costElement.innerText = building.calculateCost();
+  costElement.innerHTML = `<span style="color: var(--cost)">Cost:</span> ${numberAbreviation(buildings.get(buildingKey).calculateCost())}`;
 }
 
 async function buyBuilding(buildingKey) {
@@ -250,7 +250,7 @@ async function loadBuildingCounts() {
     const buildingId = element.getAttribute("id");
     const costElement = element.querySelector(".building-cost")
     amountElement.innerText = save.data.buildings[buildingId].amount;
-    costElement.innerText = numberAbreviation(buildings.get(buildingId).calculateCost());
+    costElement.innerHTML = `<span style="color: var(--cost)">Cost:</span> ${numberAbreviation(buildings.get(buildingId).calculateCost())}`;
     element.addEventListener("click", async () => await buyBuilding(buildingId));
   });
 }

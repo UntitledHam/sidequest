@@ -1,0 +1,9 @@
+{
+    "SOURCES_PATH": "app/static/styles/scss",
+    "TARGET_PATH": "app/static/styles/css",
+    "LIBRARY_PATHS": [],
+    "OUTPUT_STYLES": "nested",
+    "HASH_SUFFIX": null,
+    "SOURCE_COMMENTS": false,
+    "EXCLUDES": []
+}
