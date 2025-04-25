@@ -191,8 +191,10 @@ async function updateGame(deltaTime, totalTime) {
 async function render(interp) {
   const interpPoints = await lerp(oldPoints, points, interp);
   const interpPPS = await lerp(oldPointsPerMS, pointsPerMS, interp);
-  pointsElement.innerText = await numberAbreviation(interpPoints);
-  pointsPerSecondElement.innerText = `${await numberAbreviation(interpPPS * 1000)} per second.`;
+  const pointsToDisplay = await numberAbreviation(interpPoints);
+  pointsElement.innerText = pointsToDisplay;
+  // pointsElement.getElementById("pointsInTooltip").innerText = pointsToDisplay;
+  pointsPerSecondElement.innerText = `${await numberAbreviation(interpPPS * 1000)} satisfaction per second.`;
   fpsCounterElement.innerText = `FPS: ${fps.toFixed(1)}`;
   lockBuildings();
 }
@@ -211,7 +213,7 @@ async function setBuildingCount(buildingKey, count) {
   let costElement = buildingElement.querySelector(".building-cost");
   amountElement.innerText = count;
   let cost = buildings.get(buildingKey).getCost();
-  costElement.innerHTML = `<span style="color: var(--cost)">Cost:</span> ${numberAbreviation(cost)}`;
+  costElement.innerHTML = `<span style="color: var(--cost)">Cost:</span> ${numberAbreviation(cost)} satisfaction.`;
 }
 
 async function buyBuilding(buildingKey) {
@@ -265,7 +267,7 @@ async function loadBuildingCounts() {
     const buildingId = element.getAttribute("id");
     const costElement = element.querySelector(".building-cost")
     amountElement.innerText = save.data.buildings[buildingId].amount;
-    costElement.innerHTML = `<span style="color: var(--cost)">Cost:</span> ${numberAbreviation(buildings.get(buildingId).calculateCost())}`;
+    costElement.innerHTML = `<span style="color: var(--cost)">Cost:</span> ${numberAbreviation(buildings.get(buildingId).calculateCost())} satisfaction.`;
     element.addEventListener("click", async () => await buyBuilding(buildingId));
   });
 }

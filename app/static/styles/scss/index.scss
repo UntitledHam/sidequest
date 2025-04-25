@@ -65,7 +65,7 @@ $btn-disabled-color: $sky;
   --bs-primary-bg-subtle: #031633;
   --bs-secondary-bg-subtle: #161719;
   --bs-success-bg-subtle: #051b11;
-  --bs-info-bg-subtle: #032830;
+  --bs-info-bg-subtle: #{$mauve};
   --bs-warning-bg-subtle: #332701;
   --bs-danger-bg-subtle: #2c0b0e;
   --bs-light-bg-subtle: #{$overlay0};
@@ -97,13 +97,43 @@ $btn-disabled-color: $sky;
 }
 
 .btn {
-  border-color:#{$peach} !important;
-  border-width: 4px !important;
+  background-color: #{$base};
+  border-color:#{$mauve} !important;
+  border-width: 2px !important;
   border-radius: 0px !important;
+  color: #{$text};
+
+  &:focus {
+    background-color: #{$base};
+    color: #{$text};
+  }
+  &:active {
+    background-color: #{$surface1} !important;
+    transform: scale(0.98);
+  }
+  &:disabled {
+    background-color: #{$crust} !important;
+    border-color: #{$red} !important;  
+  }
 }
-.btn[disabled] {
-  background-color: #{$crust} !important;
-  border-color: #{$red} !important;
+
+// .btn:active {
+//   background-color: #{$surface0} !important;
+// }
+//
+// .btn[disabled] {
+//   background-color: #{$crust} !important;
+//   border-color: #{$red} !important;
+// }
+
+.gamebox {
+  border: solid !important;
+  border-width: 4px !important;
+  border-color: #{$peach} !important;
+}
+
+.taskbar {
+  background-color: #{$mauve};
 }
 
 // * {

@@ -22,3 +22,10 @@ for (let step of steps) {
   });
 }
 
+// Init the tooltips
+document.addEventListener('DOMContentLoaded', function () {
+  const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+  popoverTriggerList.map(function (el) {
+    return new bootstrap.Popover(el)
+  })
+})

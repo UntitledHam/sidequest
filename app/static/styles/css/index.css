@@ -200,7 +200,7 @@
   --bs-primary-bg-subtle: #031633;
   --bs-secondary-bg-subtle: #161719;
   --bs-success-bg-subtle: #051b11;
-  --bs-info-bg-subtle: #032830;
+  --bs-info-bg-subtle: #cba6f7;
   --bs-warning-bg-subtle: #332701;
   --bs-danger-bg-subtle: #2c0b0e;
   --bs-light-bg-subtle: #6c7086;
@@ -231,10 +231,25 @@
 ; }
 
 .btn {
-  border-color: #fab387 !important;
-  border-width: 4px !important;
-  border-radius: 0px !important; }
+  background-color: #1e1e2e;
+  border-color: #cba6f7 !important;
+  border-width: 2px !important;
+  border-radius: 0px !important;
+  color: #cdd6f4; }
+  .btn:focus {
+    background-color: #1e1e2e;
+    color: #cdd6f4; }
+  .btn:active {
+    background-color: #45475a !important;
+    transform: scale(0.98); }
+  .btn:disabled {
+    background-color: #11111b !important;
+    border-color: #f38ba8 !important; }
 
-.btn[disabled] {
-  background-color: #11111b !important;
-  border-color: #f38ba8 !important; }
+.gamebox {
+  border: solid !important;
+  border-width: 4px !important;
+  border-color: #fab387 !important; }
+
+.taskbar {
+  background-color: #cba6f7; }
