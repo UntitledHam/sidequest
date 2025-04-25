@@ -16,7 +16,7 @@
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% for category, message in messages %}
-          <div class="toast align-items-center text-white bg-{{ category }} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast align-items-center text-white border-{{ category }} mb-2" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
               <div class="toast-body">
                 {{ message }}
@@ -32,5 +32,6 @@
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
       <div id="toast-container"></div>
     </div>
+    <script type="module" src="{{ url_for('static', filename='scripts/flashMessages.js') }}"></script>
   </body>
 </html>

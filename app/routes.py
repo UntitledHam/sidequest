@@ -51,7 +51,7 @@ def login():
     if form.validate_on_submit():
         user = db.session.query(User).where(User.username == form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash("Invalid username or password")
+            flash("Invalid username or password", "danger")
             return redirect(url_for("login"))
         login_user(user, remember=True)
         next_page = request.args.get("next")

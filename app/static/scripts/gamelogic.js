@@ -88,7 +88,7 @@ function numberAbreviation(num){
   //console.log((10**(splitNumArray[1]%3)));
   //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))));
   //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4));
-  return `${(splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4)}${AbreviationList[Math.floor(splitNumArray[1]/3)]}`;
+  return `${(splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4)}${AbreviationList[Math.round(splitNumArray[1]/3)]}`;
 
 }
 
@@ -265,8 +265,9 @@ async function loadSave() {
     }
   }
   else {
-    points = 100;
-    totalPoints = 100;
+    // Set this to zero when out of testing.
+    points = 10;
+    totalPoints = 10;
   }
   const buildingKeys = ["gup", "skinnerbox", "monkey", "rpg"]
   
