@@ -31,6 +31,7 @@ const timeStep = 1000/targetFrameRate;
 // For the Gameloop:
 let lastTime = null;
 let totalTime = loadTime();
+let currentTime = 0;
 let timeOfLastSave = 0;
 let accumulatedLag = 0;
 let fpsThisFrame = 0;
@@ -107,8 +108,10 @@ async function saveTime(time) {
 }
 
 async function saveGame() {
+  timeOfLastSave = currentTime;
   await save.sendSave();
-  console.log("The game has \"saved\".");
+  console.log("The game has saved.");
+  await showToast("Game saved.", {type: "success"});
 }
 
 // Save the time when the player exits.
@@ -116,7 +119,8 @@ window.addEventListener("beforeunload", async () => await saveTime(totalTime));
 
 
 // The gameloop.
-async function gameLoop(currentTime) {
+async function gameLoop(time) {
+  currentTime = time;
   if (lastTime === null) {
     lastTime = currentTime;
   }
@@ -173,7 +177,6 @@ async function updateGame(deltaTime, totalTime) {
   const timeSinceLastSave = totalTime - timeOfLastSave;
   if (timeSinceLastSave >= saveInterval) {
     await saveGame();
-    timeOfLastSave = totalTime;
   }
 
   oldPoints = points;
@@ -204,7 +207,6 @@ async function lerp(oldVal, newVal, percentage) {
 }
 
 async function setBuildingCount(buildingKey, count) {
-  console.log(`Changing building count of ${buildingKey} to ${count}`)
   const building = buildings.get(buildingKey);
   building.setNumOwned(count);
   save.data.buildings[buildingKey].amount = count;
@@ -216,8 +218,31 @@ async function setBuildingCount(buildingKey, count) {
   costElement.innerHTML = `<span style="color: var(--cost)">Cost:</span> ${numberAbreviation(cost)} satisfaction.`;
 }
 
+async function showToast(message, options = {}) {
+  const { delay = 3000, type = 'info' } = options;
+  const id = `toast-${Date.now()}`;
+
+  const toastHTML = `
+    <div id="${id}" class="toast align-items-center text-white border-${type} mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  `;
+
+  const container = document.getElementById('toast-container');
+  container.insertAdjacentHTML('beforeend', toastHTML);
+
+  const toastEl = document.getElementById(id);
+  const toast = new bootstrap.Toast(toastEl, { delay });
+  toast.show();
+
+  // Optionally clean it up when hidden
+  toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+}
+
 async function buyBuilding(buildingKey) {
-  console.log(`Buying building: ${buildingKey}`)
   const building = buildings.get(buildingKey);
   const cost = building.getCost();
   if (points >= cost) {
@@ -278,6 +303,15 @@ async function startup() {
   await loadSave();
   // Start the gameloop.
   requestAnimationFrame(gameLoop);
+
+  // Add save hotkey.
+  document.addEventListener('keydown', async (e) => {
+    if (e.ctrlKey && e.key === 's') {
+      e.preventDefault();
+      await saveGame();
+    }
+  });
+
   console.log("Game started.");
 }
 
