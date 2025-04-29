@@ -4,7 +4,7 @@ export class RPG extends building {
     super("rpg", numberOwned, baseCost);
     this.timeOfLastCheck = 0;
     this.threshhold = 1;
-    this.bonus = 1000;
+    this.bonus = 100;
     this.interval = 13000;
   }
 

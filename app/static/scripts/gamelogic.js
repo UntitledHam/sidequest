@@ -45,6 +45,10 @@ let oldPoints = 0;
 let totalPoints = 0;
 
 
+//get the elements for the tutorial
+let taskBox = document.getElementById("TaskBox");
+let tutorialSpot = 0;
+
 
 //Money per second Tracking
 let pointsPerMS = 0;
@@ -91,7 +95,28 @@ function numberAbreviation(num){
   return `${(splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4)}${AbreviationList[Math.round(splitNumArray[1]/3)]}`;
 
 }
+async function tutorial(){
+  //console.log(document.getElementById("TaskBox"));
+  //console.log(bootstrap.Popover.getInstance(taskBox)); // Should not be null
+  switch(tutorialSpot){
+    case 0:
+      bootstrap.Popover.getInstance(taskBox).show();
+      tutorialSpot = 1;
+      break;
+    case 1:
+      if(buildings.get("skinnerbox").getNumOwned() >=1){
+        bootstrap.Popover.getInstance(taskBox).hide();
+        tutorialSpot = 2;
+      }
+      break;
+    case 2:
+      break;
+    default:
+      console.log("TutorialSpot error Value is " + tutorialSpot);
 
+  }
+  
+}
 
 
 async function loadTime() {
@@ -184,11 +209,8 @@ async function updateGame(deltaTime, totalTime) {
   save.data.totalPoints = totalPoints;  
   
   await updatePps(deltaTime);
-  // points += testBox.update(deltaTime);
-  // points += testMonkey.update(deltaTime);
-  // points += rpg.update(deltaTime);
-  // console.log(points);
   await updateBuildings(deltaTime);
+  await tutorial();
 }
 
 async function render(interp) {

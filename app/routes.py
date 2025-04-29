@@ -107,3 +107,10 @@ def updateSave():
 @app.route("/getsave", methods=["GET", "POST"])
 def getSave():
     return current_user.save
+
+@app.route("/wipeSave", methods=["GET", "POST"])
+def wipesave():
+    current_user.save = generate_new_save()
+    db.session.commit()
+
+    return "Save Wiped"
