@@ -1,0 +1,16 @@
+# The service to host sidequest on my server's startup. 
+# It is configured around my own username: "ham", so change it if you need.
+
+[Unit]
+Description=The sidequest website.
+After=network.target
+ 
+[Service]
+ExecStart=/home/ham/sidequest/startup.sh
+WorkingDirectory=/home/ham/sidequest
+User=ham
+Restart=always
+Environment=PYTHONUNBUFFERED=1
+ 
+[Install]
+WantedBy=multi-user.target
