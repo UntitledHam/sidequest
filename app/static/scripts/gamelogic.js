@@ -288,8 +288,8 @@ async function loadSave() {
   }
   else {
     // Set this to zero when out of testing.
-    points = 10;
-    totalPoints = 10;
+    points = 100000;
+    totalPoints = 100000;
   }
   const buildingKeys = ["gup", "skinnerbox", "monkey", "rpg"]
   

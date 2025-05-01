@@ -40,3 +40,47 @@ document.addEventListener("DOMContentLoaded", function() {
     return new bootstrap.Popover(el);
   });
 });
+
+const stepButtonElement = document.getElementById("addStep");
+const stepTextBox = document.getElementById("stepBox");
+const stepNumberElement = document.getElementById("stepNum");
+const stepListElement = document.getElementById("taskSteps");
+const taskTitleElement = document.getElementById("taskTitle");
+const taskDescriptionElement = document.getElementById("taskDescription");
+const createTaskButtonElement = document.getElementById("createTaskButton");
+const dueDateElement = document.getElementById("taskDueDate")
+
+let tempSteps = [];
+function addStep() {
+  console.log(stepTextBox.value);
+  if (stepTextBox.value == "") {
+    stepTextBox.classList.add("is-invalid")
+    return;
+  }
+  stepNumberElement.innerText++;
+  stepListElement.innerHTML += `<li>${stepTextBox.value}</li>`;
+  tempSteps.push(stepTextBox.value);
+  stepTextBox.value = "";
+}
+function createTask() {
+  let task = {};
+  task.title = taskTitleElement.value; 
+  task.duedate = dueDateElement.value;
+  task.description = taskDescriptionElement.value;
+  task.steps = tempSteps;
+  console.log(task);
+}
+
+function saveTask() {
+  taskTitleElement.value = "";
+  dueDateElement.value = "";
+  taskDescriptionElement.value = "";
+  stepTextBox.value = "";
+} 
+
+stepButtonElement.addEventListener("click", () => addStep());
+stepTextBox.addEventListener("focus", () => {
+  stepTextBox.classList.remove("is-invalid");
+});
+createTaskButtonElement.addEventListener("click", () => createTask());
+
