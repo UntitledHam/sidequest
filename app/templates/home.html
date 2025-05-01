@@ -21,9 +21,8 @@
       <div class="col">
         <div class="border border-primary-subtle p-3 text-start mx-auto gamebox" style="width: 70%">
           <ul class="list-group d-flex flex-column gap-4" style="width:100%">
-            {% for task in tasks %}
-            {{t.task(task.name, task.due_date, task.steps)}}
-            {% endfor %}
+            <span id="tasks">
+            </span>
             <li data-bs-toggle="modal" data-bs-target="#create-task-modal" class="list-group-item list-group-item-action py-3 lh-sm user-select-none text-center border-top"
               style="border-radius:0px">Create New</li>
           </ul>

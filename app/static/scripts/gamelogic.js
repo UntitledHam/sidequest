@@ -57,6 +57,83 @@ let oldPointsPerMS = 0;
 let pointsElement = document.getElementById("points");
 let pointsPerSecondElement = document.getElementById("pointsPerSecond");
 let fpsCounterElement = document.getElementById("fpsDisplay");
+const stepButtonElement = document.getElementById("addStep");
+const stepTextBox = document.getElementById("stepBox");
+const stepNumberElement = document.getElementById("stepNum");
+const stepListElement = document.getElementById("taskSteps");
+const taskTitleElement = document.getElementById("taskTitle");
+const taskDescriptionElement = document.getElementById("taskDescription");
+const createTaskButtonElement = document.getElementById("createTaskButton");
+const dueDateElement = document.getElementById("taskDueDate")
+const taskListElement = document.getElementById("tasks")
+
+const stepListBak = stepListElement.innerHtml;
+let tempSteps = [];
+function addStep() {
+  if (stepTextBox.value == "") {
+    return;
+  }
+  console.log(stepTextBox.value);
+  stepNumberElement.innerText++;
+  stepListElement.innerHTML += `<li>${stepTextBox.value}</li>`;
+  tempSteps.push(stepTextBox.value);
+  stepTextBox.value = "";
+}
+async function createTask() {
+  let task = {};
+  task.title = taskTitleElement.value; 
+  task.duedate = dueDateElement.value;
+  task.description = taskDescriptionElement.value;
+  task.steps = tempSteps;
+  taskTitleElement.value = "";
+  dueDateElement.value = "";
+  taskDescriptionElement.value = "";
+  stepTextBox.value = "";
+  save.data.tasks.push(task);
+  stepListElement.innerHTML = "";
+  await showToast("Sucessfully created quest!", {type: "success"});
+  // Pass in true to hide the notification.
+  await saveGame(true);
+  await loadTasks();
+
+  console.log(task);
+}
+
+
+async function loadTasks() {
+  for (let task of save.data.tasks.values()) {
+    console.log(`Loading task: ${task.title}`)
+    let stepHtml = "";
+    if (task.hasOwnProperty("steps")) {
+      for (let step of task.steps.values()) {
+        stepHtml += `<li><small class="step">${step}</small></li>`
+      }
+    } 
+    taskListElement.innerHTML += `
+    <li class="list-group-item border" style="border-radius: 0">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-8">
+            <h5 class="fs-4 fw-bold text-start">${task.title}</h5>
+          </div>
+          <div class="col-sm-4">
+            <p class="fs-6 text-end fst-italic">Due: ${new Date(task.duedate).toLocaleDateString()}</p>
+          </div>
+        </div>
+        <div class="row text-start">
+          <ul>
+            ${stepHtml}
+          </ul>
+        </div>
+      </div>
+    </li>
+    `; 
+  }
+}
+
+
+stepButtonElement.addEventListener("click", () => addStep());
+createTaskButtonElement.addEventListener("click", () => createTask());
 
 async function updatePps(deltaTime){
   let len = pointsHistory.push(totalPoints);
@@ -132,11 +209,13 @@ async function saveTime(time) {
   window.localStorage.setItem("total_time", time);
 }
 
-async function saveGame() {
+async function saveGame(silent=false) {
   timeOfLastSave = currentTime;
   await save.sendSave();
   console.log("The game has saved.");
-  await showToast("Game saved.", {type: "success"});
+  if (!silent) {
+    await showToast("Game saved.", {type: "success"});
+  }
 }
 
 // Save the time when the player exits.
@@ -300,11 +379,16 @@ async function loadSave() {
     }
   });
 
+  if (!save.data.hasOwnProperty("tasks")) {
+    save.data.tasks = []; 
+  }
+
   buildings.set("skinnerbox", new skinnerBox(save.data.buildings.skinnerbox.amount, buildingJson.skinnerbox.baseCost));
   buildings.set("gup", new gup(save.data.buildings.gup.amount, buildingJson.gup.baseCost));
   buildings.set("monkey", new monkey(save.data.buildings.monkey.amount, buildingJson.monkey.baseCost));
   buildings.set("rpg", new RPG(save.data.buildings.rpg.amount, buildingJson.rpg.baseCost));
   await loadBuildingCounts();
+  await loadTasks();
 }
 
 async function loadBuildingCounts() {
