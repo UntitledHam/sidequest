@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Change working directory to the path of sidequest.
 cd "$(dirname "$0")"; 
 
