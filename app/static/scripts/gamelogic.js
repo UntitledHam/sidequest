@@ -67,7 +67,6 @@ const createTaskButtonElement = document.getElementById("createTaskButton");
 const dueDateElement = document.getElementById("taskDueDate")
 const taskListElement = document.getElementById("tasks")
 
-const stepListBak = stepListElement.innerHtml;
 let tempSteps = [];
 function addStep() {
   if (stepTextBox.value == "") {
@@ -91,6 +90,7 @@ async function createTask() {
   stepTextBox.value = "";
   save.data.tasks.push(task);
   stepListElement.innerHTML = "";
+  stepNumberElement.innerText = "1";
   await showToast("Sucessfully created quest!", {type: "success"});
   // Pass in true to hide the notification.
   await saveGame(true);
@@ -101,6 +101,7 @@ async function createTask() {
 
 
 async function loadTasks() {
+  taskListElement.innerHTML = "";
   for (let task of save.data.tasks.values()) {
     console.log(`Loading task: ${task.title}`)
     let stepHtml = "";
