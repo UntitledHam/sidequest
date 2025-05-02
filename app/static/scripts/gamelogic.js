@@ -78,6 +78,18 @@ function addStep() {
   tempSteps.push([stepTextBox.value,  false]);
   stepTextBox.value = "";
 }
+
+async function calculateAward(date, numberOfSteps) {
+  const currentDate = new Date(currentTime)
+  const dueDate = new Date(date); 
+  currentDate.setHours(0,0,0);
+  dueDate.setHours(0,0,0);
+  const msPast = (dueDate.getTime() - currentDate.getTime());
+  const award = 0.2 * (pointsPerMS * msPast + 10) * (numberOfSteps + 1); 
+  console.log(award);
+  return award;
+}
+
 async function createTask() {
   let task = {};
   task.title = taskTitleElement.value; 
@@ -85,7 +97,8 @@ async function createTask() {
   task.description = taskDescriptionElement.value;
   task.steps = tempSteps;
   task.completedsteps = 0;
-  task.completed = false;
+  task.completed = false;  
+  task.award = await calculateAward(task.duedate, tempSteps.length);
   taskTitleElement.value = "";
   dueDateElement.value = "";
   taskDescriptionElement.value = "";
@@ -109,10 +122,14 @@ async function loadTasks() {
     const task = save.data.tasks[x];
     if (!task || task.completed) continue;
 
-    if (task.completedsteps === task.steps.length) {
-      task.completed = true;
-      save.data.completedtasks.push(task);
-      save.data.tasks.splice(x, 1); // This now works safely
+    if (task.completedsteps === task.steps.length & !task.completed) {
+      save.data.tasks[x].completed = true;
+      // save.data.completedtasks.push(task);
+      // save.data.tasks.splice(x, 1);
+      console.log("Awarding points");
+      points += task.award;
+      totalPoints += task.award;
+      console.log(`Points are now ${points}`)
       await saveGame(true);
       continue;
     }
@@ -142,6 +159,7 @@ async function loadTasks() {
           <div class="row text-start">
             <ul>${stepHtml}</ul>
           </div>
+          <p>Awards: ${task.award}</p>
         </div>
       </li>
     `;
@@ -179,7 +197,6 @@ async function loadTasks() {
 
           // Auto-complete if all steps done
           if (save.data.tasks[x].completedsteps === save.data.tasks[x].steps.length) {
-            save.data.tasks[x].completed = true;
             await saveGame(true);
             await loadTasks(); // Refresh list
           }
@@ -425,8 +442,8 @@ async function loadSave() {
   }
   else {
     // Set this to zero when out of testing.
-    points = 100000;
-    totalPoints = 100000;
+    points = 0;
+    totalPoints = 0;
   }
   const buildingKeys = ["gup", "skinnerbox", "monkey", "rpg"]
   
