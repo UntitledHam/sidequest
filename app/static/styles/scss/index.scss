@@ -35,8 +35,7 @@ $crust: #11111b;
 @import "node_modules/bootstrap/scss/mixins";
 @import "node_modules/bootstrap/scss/root";
 
-
-[data-bs-theme=mocha] {
+[data-bs-theme="mocha"] {
   color-scheme: dark;
   --bs-body-color: #{$text};
   --bs-body-color-rgb: #{to-rgb($text)};
@@ -48,7 +47,7 @@ $crust: #11111b;
   --bs-secondary-color-rgb: #{to-rgb($sky)};
   --bs-secondary-bg: #{$surface0};
   --bs-secondary-bg-rgb: #{to-rgb($surface0)}
-  --bs-tertiary-color: rgba(222, 226, 230, 0.5);
+    --bs-tertiary-color: rgba(222, 226, 230, 0.5);
   --bs-tertiary-color-rgb: 222, 226, 230;
   --bs-tertiary-bg: #{$surface0};
   --bs-tertiary-bg-rgb: 43, 48, 53;
@@ -91,12 +90,12 @@ $crust: #11111b;
   --bs-form-invalid-color: #{$red};
   --bs-form-invalid-border-color: #{$red};
 
-  --cost: #{$yellow}
+  --cost: #{$yellow};
 }
 
 .btn {
   background-color: #{$base};
-  border-color:#{$mauve} !important;
+  border-color: #{$mauve} !important;
   border-width: 2px !important;
   border-radius: 0px !important;
   color: #{$text};
@@ -111,7 +110,7 @@ $crust: #11111b;
   }
   &:disabled {
     background-color: #{$crust} !important;
-    border-color: #{$red} !important;  
+    border-color: #{$red} !important;
   }
 }
 
@@ -134,7 +133,27 @@ $crust: #11111b;
   background-color: #{$mauve};
 }
 
-// * {
-//   background: $base;
-//   color: $text;
-// }
+.step {
+  &.disabled {
+    color: #{$surface1};
+    text-decoration: line-through;
+  }
+}
+.invisible-btn {
+  background-color: transparent;
+  color: #{$lavender};
+  text-decoration: underline;
+  border: none;
+  // padding: 0.5rem 1.5rem;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #{$lavender};
+    color: #{$text};
+  }
+}
+
+

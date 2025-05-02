@@ -173,7 +173,7 @@
   --bs-form-invalid-color: #f8b9cb;
   --bs-form-invalid-border-color: #f8b9cb; }
 
-[data-bs-theme=mocha] {
+[data-bs-theme="mocha"] {
   color-scheme: dark;
   --bs-body-color: #cdd6f4;
   --bs-body-color-rgb: 205, 214, 244;
@@ -185,7 +185,7 @@
   --bs-secondary-color-rgb: 137, 220, 235;
   --bs-secondary-bg: #313244;
   --bs-secondary-bg-rgb: 49, 50, 68
-  --bs-tertiary-color: rgba(222, 226, 230, 0.5);
+    --bs-tertiary-color: rgba(222, 226, 230, 0.5);
   --bs-tertiary-color-rgb: 222, 226, 230;
   --bs-tertiary-bg: #313244;
   --bs-tertiary-bg-rgb: 43, 48, 53;
@@ -227,8 +227,7 @@
   --bs-form-valid-border-color: #a6e3a1;
   --bs-form-invalid-color: #f38ba8;
   --bs-form-invalid-border-color: #f38ba8;
-  --cost: #f9e2af
-; }
+  --cost: #f9e2af; }
 
 .btn {
   background-color: #1e1e2e;
@@ -253,3 +252,18 @@
 
 .taskbar {
   background-color: #cba6f7; }
+
+.step.disabled {
+  color: #45475a;
+  text-decoration: line-through; }
+
+.invisible-btn {
+  background-color: transparent;
+  color: #b4befe;
+  text-decoration: underline;
+  border: none;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer; }
+  .invisible-btn:hover {
+    background-color: #b4befe;
+    color: #cdd6f4; }

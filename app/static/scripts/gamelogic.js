@@ -75,7 +75,7 @@ function addStep() {
   console.log(stepTextBox.value);
   stepNumberElement.innerText++;
   stepListElement.innerHTML += `<li>${stepTextBox.value}</li>`;
-  tempSteps.push(stepTextBox.value);
+  tempSteps.push([stepTextBox.value,  false]);
   stepTextBox.value = "";
 }
 async function createTask() {
@@ -84,6 +84,8 @@ async function createTask() {
   task.duedate = dueDateElement.value;
   task.description = taskDescriptionElement.value;
   task.steps = tempSteps;
+  task.completedsteps = 0;
+  task.completed = false;
   taskTitleElement.value = "";
   dueDateElement.value = "";
   taskDescriptionElement.value = "";
@@ -102,12 +104,22 @@ async function createTask() {
 
 async function loadTasks() {
   taskListElement.innerHTML = "";
+  let x = 0;
   for (let task of save.data.tasks.values()) {
+    if (task.completed) {
+      continue;
+    }
+    else if (task.completedsteps == task.steps.length) {
+      save.data.tasks[x].completed = true;
+      await saveGame(true);
+    }
     console.log(`Loading task: ${task.title}`)
     let stepHtml = "";
     if (task.hasOwnProperty("steps")) {
+      let y = 0;
       for (let step of task.steps.values()) {
-        stepHtml += `<li><small class="step">${step}</small></li>`
+        stepHtml += `<li><button id="${x}-step-${y}" class="btn invisible-btn step ${step[1] ? "disabled":""}">${step[0]}</button></li>`
+        y++;
       }
     } 
     taskListElement.innerHTML += `
@@ -129,8 +141,49 @@ async function loadTasks() {
       </div>
     </li>
     `; 
+
+    // Just don't ask. I am not proud of this. But it works.
+    if (task.hasOwnProperty("steps")) {
+      let z = 0;
+      const xCopy = x;
+      for (let step of task.steps.values()) {
+        const zCopy = z;
+        const stepElement = document.getElementById(`${x}-step-${z}`);
+        stepElement.addEventListener("click", async () => {
+          save.data.tasks[xCopy].steps[zCopy][1] = true;
+          stepElement.classList.add("disabled");
+          await saveGame(true);
+          showToast(`Congrats on completing "${stepElement.innerText}"!`, {type: "success"});
+          save.data.tasks[xCopy].completedsteps++;
+        });
+        z++;
+      }
+    }
+    x++;
   }
 }
+
+
+// const crossedOutColor = window
+//   .getComputedStyle(document.documentElement)
+//   .getPropertyValue("--bs-tertiary-color");
+// const standardColor = window
+//   .getComputedStyle(document.documentElement)
+//   .getPropertyValue("--bs-list-group-color");
+//
+// for (let step of steps) {
+//   step.addEventListener("click", () => {
+//     if (!step.classList.contains("done")) {
+//       step.innerHTML = `<s><i>${step.innerText}</i></s>`;
+//       step.style.color = crossedOutColor;
+//       step.classList.add("done");
+//     } else {
+//       step.innerHTML = step.innerText;
+//       step.style.color = standardColor;
+//       step.classList.remove("done");
+//     }
+//   });
+// }
 
 
 stepButtonElement.addEventListener("click", () => addStep());
