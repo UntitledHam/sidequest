@@ -104,86 +104,90 @@ async function createTask() {
 
 async function loadTasks() {
   taskListElement.innerHTML = "";
-  let x = 0;
-  for (let task of save.data.tasks.values()) {
-    if (task.completed) {
+
+  for (let x = save.data.tasks.length - 1; x >= 0; x--) {
+    const task = save.data.tasks[x];
+    if (!task || task.completed) continue;
+
+    if (task.completedsteps === task.steps.length) {
+      task.completed = true;
+      save.data.completedtasks.push(task);
+      save.data.tasks.splice(x, 1); // This now works safely
+      await saveGame(true);
       continue;
     }
-    else if (task.completedsteps == task.steps.length) {
-      save.data.tasks[x].completed = true;
-      await saveGame(true);
-    }
-    console.log(`Loading task: ${task.title}`)
+
+    console.log(`Loading task: ${task.title}`);
+
     let stepHtml = "";
-    if (task.hasOwnProperty("steps")) {
-      let y = 0;
-      for (let step of task.steps.values()) {
-        stepHtml += `<li><button id="${x}-step-${y}" class="btn invisible-btn step ${step[1] ? "disabled":""}">${step[0]}</button></li>`
-        y++;
-      }
-    } 
-    taskListElement.innerHTML += `
-    <li class="list-group-item border" style="border-radius: 0">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-8">
-            <h5 class="fs-4 fw-bold text-start">${task.title}</h5>
-          </div>
-          <div class="col-sm-4">
-            <p class="fs-6 text-end fst-italic">Due: ${new Date(task.duedate).toLocaleDateString()}</p>
-          </div>
-        </div>
-        <div class="row text-start">
-          <ul>
-            ${stepHtml}
-          </ul>
-        </div>
-      </div>
-    </li>
-    `; 
-
-    // Just don't ask. I am not proud of this. But it works.
-    if (task.hasOwnProperty("steps")) {
-      let z = 0;
-      const xCopy = x;
-      for (let step of task.steps.values()) {
-        const zCopy = z;
-        const stepElement = document.getElementById(`${x}-step-${z}`);
-        stepElement.addEventListener("click", async () => {
-          save.data.tasks[xCopy].steps[zCopy][1] = true;
-          stepElement.classList.add("disabled");
-          await saveGame(true);
-          showToast(`Congrats on completing "${stepElement.innerText}"!`, {type: "success"});
-          save.data.tasks[xCopy].completedsteps++;
-        });
-        z++;
+    if (Array.isArray(task.steps)) {
+      for (let y = 0; y < task.steps.length; y++) {
+        const step = task.steps[y];
+        if (!step) continue;
+        stepHtml += `<li><button id="task-${x}-step-${y}" class="btn invisible-btn step ${step[1] ? "disabled" : ""}">${step[0]}</button></li>`;
       }
     }
-    x++;
+
+    taskListElement.innerHTML += `
+      <li class="list-group-item border" style="border-radius: 0">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8">
+              <h5 class="fs-4 fw-bold text-start">${task.title}</h5>
+            </div>
+            <div class="col-sm-4">
+              <p class="fs-6 text-end fst-italic">Due: ${new Date(task.duedate).toLocaleDateString()}</p>
+            </div>
+          </div>
+          <div class="row text-start">
+            <ul>${stepHtml}</ul>
+          </div>
+        </div>
+      </li>
+    `;
   }
+
+  setTimeout(() => {
+    for (let x = 0; x < save.data.tasks.length; x++) {
+      const task = save.data.tasks[x];
+      if (!task || task.completed || !Array.isArray(task.steps)) continue;
+
+      for (let y = 0; y < task.steps.length; y++) {
+        const step = task.steps[y];
+        if (!step) continue;
+
+        const buttonId = `task-${x}-step-${y}`;
+        const stepElement = document.getElementById(buttonId);
+        if (!stepElement) continue;
+
+        stepElement.addEventListener("click", async () => {
+          const stepData = save.data.tasks[x].steps[y];
+          if (!stepData || stepData[1]) return;
+
+          stepData[1] = true;
+          save.data.tasks[x].completedsteps++;
+          stepElement.classList.add("disabled");
+
+          confetti({
+            particleCount: 100,
+            spread: 150,
+            origin: { y: 0.6 }
+          });
+
+          await saveGame(true);
+          showToast(`Congrats on completing "${stepElement.innerText}"!`, { type: "success" });
+
+          // Auto-complete if all steps done
+          if (save.data.tasks[x].completedsteps === save.data.tasks[x].steps.length) {
+            save.data.tasks[x].completed = true;
+            await saveGame(true);
+            await loadTasks(); // Refresh list
+          }
+        });
+      }
+    }
+  }, 0);
 }
-
-
-// const crossedOutColor = window
-//   .getComputedStyle(document.documentElement)
-//   .getPropertyValue("--bs-tertiary-color");
-// const standardColor = window
-//   .getComputedStyle(document.documentElement)
-//   .getPropertyValue("--bs-list-group-color");
-//
-// for (let step of steps) {
-//   step.addEventListener("click", () => {
-//     if (!step.classList.contains("done")) {
-//       step.innerHTML = `<s><i>${step.innerText}</i></s>`;
-//       step.style.color = crossedOutColor;
-//       step.classList.add("done");
-//     } else {
-//       step.innerHTML = step.innerText;
-//       step.style.color = standardColor;
-//       step.classList.remove("done");
-//     }
-//   });
-// }
 
 
 stepButtonElement.addEventListener("click", () => addStep());
@@ -435,6 +439,7 @@ async function loadSave() {
 
   if (!save.data.hasOwnProperty("tasks")) {
     save.data.tasks = []; 
+    save.data.completedtasks = [];
   }
 
   buildings.set("skinnerbox", new skinnerBox(save.data.buildings.skinnerbox.amount, buildingJson.skinnerbox.baseCost));
