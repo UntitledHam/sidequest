@@ -132,7 +132,7 @@ function validatePage1() {
   return true;
 }
 
-document.getElementById("nextButton").addEventListener("click", (event) => {
+document.getElementById("nextButton").addEventListener("click", () => {
   if (!validatePage1()) {
     alert("Please fill out all of the fields.");
   }
