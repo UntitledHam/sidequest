@@ -80,14 +80,14 @@ function addStep() {
 }
 
 async function calculateAward(date, numberOfSteps) {
-  const currentDate = new Date(currentTime)
-  const dueDate = new Date(date); 
-  currentDate.setHours(0,0,0);
-  dueDate.setHours(0,0,0);
-  const msPast = (dueDate.getTime() - currentDate.getTime());
-  const award = 0.2 * (pointsPerMS * msPast + 10) * (numberOfSteps + 1); 
-  console.log(award);
-  return award;
+  // const currentDate = new Date(currentTime)
+  // const dueDate = new Date(date); 
+  // currentDate.setHours(0,0,0);
+  // dueDate.setHours(0,0,0);
+  // const msPast = (dueDate.getTime() - currentDate.getTime());
+  // const award = 0.2 * (pointsPerMS * msPast + 10) * (numberOfSteps + 1); 
+  // console.log(award);
+  return 100;
 }
 
 async function createTask() {
