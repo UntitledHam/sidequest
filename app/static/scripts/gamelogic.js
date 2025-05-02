@@ -91,6 +91,10 @@ async function calculateAward(date, numberOfSteps) {
 }
 
 async function createTask() {
+  if (!validatePage2()) {
+    alert("Please add a step!");
+    return;
+  }
   let task = {};
   task.title = taskTitleElement.value; 
   task.duedate = dueDateElement.value;
@@ -114,6 +118,30 @@ async function createTask() {
   console.log(task);
 }
 
+function validatePage1() {
+  if (taskTitleElement.value == "") {
+    return false; 
+  }
+  else if (taskDescriptionElement.value == "") {
+    return false;
+  }
+  else if (dueDateElement.value == "") {
+    return false;
+  }
+
+  return true;
+}
+
+document.getElementById("nextButton").addEventListener("click", (event) => {
+  if (!validatePage1()) {
+    alert("Please fill out all of the fields.");
+  }
+});
+
+async function validatePage2() {
+  return tempSteps.length > 0;
+}
+
 
 async function loadTasks() {
   taskListElement.innerHTML = "";
@@ -124,8 +152,8 @@ async function loadTasks() {
 
     if (task.completedsteps === task.steps.length & !task.completed) {
       save.data.tasks[x].completed = true;
-      // save.data.completedtasks.push(task);
-      // save.data.tasks.splice(x, 1);
+      save.data.completedtasks.push(task);
+      save.data.tasks.splice(x, 1);
       console.log("Awarding points");
       points += task.award;
       totalPoints += task.award;
