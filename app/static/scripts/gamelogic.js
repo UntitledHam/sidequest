@@ -343,11 +343,6 @@ function numberAbreviation(num){
   let truncatedNum = parseFloat(num.toPrecision(4));
   let expNum = truncatedNum.toExponential();
   let splitNumArray = expNum.split('e+');
-  //console.log('Start Point');
-  //console.log(splitNumArray[0]);
-  //console.log((10**(splitNumArray[1]%3)));
-  //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))));
-  //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4));
   return `${(splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4)}${AbreviationList[Math.round(splitNumArray[1]/3)]}`;
 
 }
