@@ -64,8 +64,9 @@ const stepListElement = document.getElementById("taskSteps");
 const taskTitleElement = document.getElementById("taskTitle");
 const taskDescriptionElement = document.getElementById("taskDescription");
 const createTaskButtonElement = document.getElementById("createTaskButton");
-const dueDateElement = document.getElementById("taskDueDate")
-const taskListElement = document.getElementById("tasks")
+const dueDateElement = document.getElementById("taskDueDate");
+const taskListElement = document.getElementById("tasks");
+const taskProgressElement = document.getElementById("taskProgressList");
 
 let tempSteps = [];
 function addStep() {
@@ -110,6 +111,7 @@ async function createTask() {
   save.data.tasks.push(task);
   stepListElement.innerHTML = "";
   stepNumberElement.innerText = "1";
+  tempSteps = [];
   await showToast("Sucessfully created quest!", {type: "success"});
   // Pass in true to hide the notification.
   await saveGame(true);
@@ -191,6 +193,29 @@ async function loadTasks() {
         </div>
       </li>
     `;
+  
+    let firstUncomplete = "";
+    for (let step of task.steps) {
+      if (!step[1]) {
+        firstUncomplete = step[0];
+        break;
+      }
+    }
+    const progress = Math.floor(100 * (task.completedsteps / task.steps.length));
+    taskProgressElement.innerHTML += `
+      <div class="carousel-item">
+        <div class="container" style="width:70%">
+          <h3><b>${task.title}</b></h3>
+          <small class="fs-6">Next up: ${firstUncomplete}</small>
+          <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="${progress}"
+            aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar progress-bar-striped taskbar" style="width:${progress}%"></div>
+          </div>
+          <small>Awards: ${task.award}</small>
+        </div>
+      </div>
+    `
+
   }
 
   setTimeout(() => {
@@ -222,6 +247,7 @@ async function loadTasks() {
 
           await saveGame(true);
           showToast(`Congrats on completing "${stepElement.innerText}"!`, { type: "success" });
+          await loadTasks();
 
           // Auto-complete if all steps done
           if (save.data.tasks[x].completedsteps === save.data.tasks[x].steps.length) {
