@@ -147,9 +147,11 @@ async function validatePage2() {
 
 async function loadTasks() {
   taskListElement.innerHTML = "";
+  taskProgressElement.innerHTML = "";
 
   for (let x = save.data.tasks.length - 1; x >= 0; x--) {
     const task = save.data.tasks[x];
+    await displayTask(task);
     if (!task || task.completed) continue;
 
     if (task.completedsteps === task.steps.length & !task.completed) {
@@ -174,7 +176,7 @@ async function loadTasks() {
         stepHtml += `<li><button id="task-${x}-step-${y}" class="btn invisible-btn step ${step[1] ? "disabled" : ""}">${step[0]}</button></li>`;
       }
     }
-
+    
     taskListElement.innerHTML += `
       <li class="list-group-item border" style="border-radius: 0">
         <div class="container">
@@ -247,12 +249,11 @@ async function loadTasks() {
 
           await saveGame(true);
           showToast(`Congrats on completing "${stepElement.innerText}"!`, { type: "success" });
-          await loadTasks();
 
           // Auto-complete if all steps done
           if (save.data.tasks[x].completedsteps === save.data.tasks[x].steps.length) {
+            await loadTasks();
             await saveGame(true);
-            await loadTasks(); // Refresh list
           }
         });
       }
@@ -283,6 +284,55 @@ async function updatePps(deltaTime){
   timeHistory.forEach(element => {timeSince += element;});
   oldPointsPerMS = pointsPerMS;
   pointsPerMS = (num/(timeSince));
+}
+
+async function displayModal(title, content) {
+  // Generate a unique ID for each modal to avoid conflicts
+  const modalId = 'modal-' + Date.now();
+
+  // Create modal HTML structure
+  const modalHTML = `
+    <div class="modal fade" id="${modalId}" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">${title}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            ${content}
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Append modal to the container
+  document.getElementById('modal-container').insertAdjacentHTML('beforeend', modalHTML);
+
+  // Show the modal using Bootstrap's Modal API
+  const modalElement = document.getElementById(modalId);
+  const bootstrapModal = new bootstrap.Modal(modalElement);
+  bootstrapModal.show();
+
+  // Optional: Remove modal from DOM when hidden
+  modalElement.addEventListener('hidden.bs.modal', () => {
+    modalElement.remove();
+  });
+}
+
+async function displayTask(task) {
+  let content = `
+    <p>${task.description}</p>
+  `
+  await displayModal(task.title, content);
 }
 
 function numberAbreviation(num){
@@ -435,7 +485,47 @@ async function render(interp) {
 async function lerp(oldVal, newVal, percentage) {
   return oldVal * (1 - percentage) + newVal * percentage;
 }
+function showModal(title, content) {
+  // Generate a unique ID for each modal to avoid conflicts
+  const modalId = 'modal-' + Date.now();
 
+  // Create modal HTML structure
+  const modalHTML = `
+    <div class="modal fade" id="${modalId}" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">${title}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            ${content}
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Append modal to the container
+  document.getElementById('modal-container').insertAdjacentHTML('beforeend', modalHTML);
+
+  // Show the modal using Bootstrap's Modal API
+  const modalElement = document.getElementById(modalId);
+  const bootstrapModal = new bootstrap.Modal(modalElement);
+  bootstrapModal.show();
+
+  // Optional: Remove modal from DOM when hidden
+  modalElement.addEventListener('hidden.bs.modal', () => {
+    modalElement.remove();
+  });
+}
 async function setBuildingCount(buildingKey, count) {
   const building = buildings.get(buildingKey);
   building.setNumOwned(count);
@@ -548,6 +638,8 @@ async function startup() {
       await saveGame();
     }
   });
+
+  await displayModal("This is test.", "Hello World!")
 
   console.log("Game started.");
 }
