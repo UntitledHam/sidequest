@@ -18,7 +18,7 @@
         <a class="navbar-brand" href="{{url_for("index")}}">Sidequest</a>
         {% if current_user.is_authenticated %}
         <div class="d-flex logoutbox">
-          <a class="fs-2 logout" href={{url_for("logout")}}>󰗽</a>
+          <a class="fs-2 logout nf nf-md-logout_variant" href={{url_for("logout")}}> </a>
         </div>
         {% endif %}
       </div>
