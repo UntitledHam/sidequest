@@ -12,8 +12,6 @@
   </div>
 
 
-
-
   <div class="container-fluid text-center" id="TaskBox" data-bs-toggle="popover" data-bs-html="true"
     data-bs-trigger="manual" data-bs-placement="top" data-bs-content="{{pointsTooltip}}">
     <div class="row" style="height:10vh;"></div>
@@ -71,6 +69,26 @@
   </div>
   {{toast}}
   {{taskModal}}
+
+  <!-- Load Screen -->
+  <div id="page-blocker" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bs-body-bg);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    ">
+    <!-- Spinner -->
+    <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
 </div>
 <script type="module" src="{{ url_for('static', filename='scripts/gamelogic.js') }}"></script>
 <script type="module" src="{{ url_for('static', filename='scripts/tasks.js') }}"></script>
