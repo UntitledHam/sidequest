@@ -300,3 +300,13 @@
   border: solid !important;
   border-width: 2px;
   border-color: #f2cdcd !important; }
+
+.yellow {
+  color: #f9e2af; }
+
+.primarytext {
+  color: #cdd6f4; }
+
+.logintitle {
+  font-weight: bold;
+  color: #cdd6f4 !important; }

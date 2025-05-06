@@ -197,3 +197,15 @@ $crust: #11111b;
   border-color: #{$flamingo} !important;
 }
 
+.yellow {
+  color: #{$yellow};
+}
+
+.primarytext {
+  color: #{$text};
+}
+
+.logintitle {
+  font-weight: bold;
+  color: #{$text} !important;
+}

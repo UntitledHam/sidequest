@@ -596,7 +596,7 @@ async function updateGame(deltaTime, totalTime) {
   
   await updatePps(deltaTime);
   await updateBuildings(deltaTime);
-  await tutorial();
+  // await tutorial();
 }
 
 async function render(interp) {
