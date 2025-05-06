@@ -149,9 +149,31 @@ async function loadTasks() {
   taskListElement.innerHTML = "";
   taskProgressElement.innerHTML = "";
 
+  if (save.data.tasks.length == 0) {
+     taskProgressElement.innerHTML += `
+      <div class="carousel-item active">
+        <div class="container" style="width:70%">
+          <h3><b>No Quests</b></h3>
+          <small class="fs-6">Please create a Quest for it to display here.</small>
+        </div>
+      </div>
+    `
+    taskListElement.innerHTML += `
+       <li class="list-group-item border" style="border-radius: 0">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8">
+              <h5 class="fs-4 fw-bold text-start">No Quests</h5>
+              <small class="fs-6">Please create a Quest for it to display here.</small>
+            </div>
+          </div>
+        </div>
+      </li>
+    `
+  }
+
   for (let x = save.data.tasks.length - 1; x >= 0; x--) {
     const task = save.data.tasks[x];
-    await displayTask(task);
     if (!task || task.completed) continue;
 
     if (task.completedsteps === task.steps.length & !task.completed) {
@@ -163,7 +185,7 @@ async function loadTasks() {
       totalPoints += task.award;
       console.log(`Points are now ${points}`)
       await saveGame(true);
-      continue;
+      return loadTasks();
     }
 
     console.log(`Loading task: ${task.title}`);
@@ -205,7 +227,7 @@ async function loadTasks() {
     }
     const progress = Math.floor(100 * (task.completedsteps / task.steps.length));
     taskProgressElement.innerHTML += `
-      <div class="carousel-item">
+      <div class="carousel-item ${taskProgressElement.innerHTML == "" ? "active":""}">
         <div class="container" style="width:70%">
           <h3><b>${task.title}</b></h3>
           <small class="fs-6">Next up: ${firstUncomplete}</small>
@@ -232,6 +254,13 @@ async function loadTasks() {
         const buttonId = `task-${x}-step-${y}`;
         const stepElement = document.getElementById(buttonId);
         if (!stepElement) continue;
+
+        if (y == 0) {
+          stepElement.parentElement.parentElement.parentElement.parentElement.parentElement.addEventListener("click", async() => {
+            await displayTask(task);
+          });
+        }
+        
 
         stepElement.addEventListener("click", async () => {
           const stepData = save.data.tasks[x].steps[y];
@@ -296,7 +325,6 @@ async function displayModal(title, content) {
       <div class="modal-dialog">
         <div class="modal-content">
 
-          <div class="modal-header">
             <h5 class="modal-title">${title}</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
@@ -329,10 +357,86 @@ async function displayModal(title, content) {
 }
 
 async function displayTask(task) {
-  let content = `
+  let stepContent = ``;
+
+  task.steps.forEach((step, i) => {
+    stepContent += `
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" data-step-index="${i}" ${step[1] ? "checked" : ""}>
+        <label class="form-check-label">${step[0]}</label>
+      </div>
+    `;
+  });
+
+  const content = `
     <p>${task.description}</p>
-  `
-  await displayModal(task.title, content);
+    ${stepContent}
+  `;
+
+  // Generate unique ID
+  const modalId = 'modal-' + Date.now();
+  const modalHTML = `
+    <div class="modal fade" id="${modalId}" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">${task.title}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            ${content}
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Append to DOM
+  document.getElementById('modal-container').insertAdjacentHTML('beforeend', modalHTML);
+
+  const modalElement = document.getElementById(modalId);
+  const bootstrapModal = new bootstrap.Modal(modalElement);
+
+  // Attach event listener AFTER modal is fully shown
+  modalElement.addEventListener('shown.bs.modal', () => {
+    const checkboxes = modalElement.querySelectorAll('.form-check-input');
+    checkboxes.forEach(checkbox => {
+      const index = parseInt(checkbox.getAttribute('data-step-index'), 10);
+      checkbox.addEventListener('change', async () => {
+        task.steps[index][1] = checkbox.checked;
+        task.completedsteps += (checkbox.checked ? 1:-1);
+        console.log(`Completed: ${task.completedsteps}`)
+        console.log(`Step ${index} is now ${checkbox.checked}`);
+        if (task.completedsteps == task.steps.length) {
+          bootstrap.Modal.getInstance(modalElement).hide();
+        }
+        if (checkbox.checked) {
+          confetti({
+            particleCount: 100,
+            spread: 150,
+            origin: { y: 0.2 }
+          });
+        }
+
+        await loadTasks();
+      });
+    });
+  });
+
+  // Show modal
+  bootstrapModal.show();
+
+  // Cleanup on close
+  modalElement.addEventListener('hidden.bs.modal', () => {
+    modalElement.remove();
+  });
 }
 
 function numberAbreviation(num){
@@ -344,7 +448,7 @@ function numberAbreviation(num){
   let expNum = truncatedNum.toExponential();
   let splitNumArray = expNum.split('e+');
   return `${(splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4)}${AbreviationList[Math.round(splitNumArray[1]/3)]}`;
-
+h
 }
 async function tutorial(){
   //console.log(document.getElementById("TaskBox"));
@@ -634,8 +738,9 @@ async function startup() {
     }
   });
 
-  await displayModal("This is test.", "Hello World!")
 
+  // Hide loading screen.
+  document.getElementById('page-blocker').style.display = 'none';
   console.log("Game started.");
 }
 

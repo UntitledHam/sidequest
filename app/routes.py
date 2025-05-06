@@ -97,7 +97,6 @@ def error404(e):
 def updateSave():
     print("Attempting to recieve save file.")
     data = request.get_json()
-    print(data["points"])
     current_user.save = data
     db.session.commit()
 
@@ -108,7 +107,7 @@ def updateSave():
 def getSave():
     return current_user.save
 
-@app.route("/wipeSave", methods=["GET", "POST"])
+@app.route("/wipesave", methods=["GET", "POST"])
 def wipesave():
     current_user.save = generate_new_save()
     db.session.commit()
