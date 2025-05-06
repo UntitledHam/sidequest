@@ -192,7 +192,7 @@ async function loadTasks() {
       </div>
     `
     taskListElement.innerHTML += `
-       <li class="list-group-item border" style="border-radius: 0">
+       <li class="list-group-item border quest" style="border-radius: 0">
         <div class="container">
           <div class="row">
             <div class="col-sm-8">
