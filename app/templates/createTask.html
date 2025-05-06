@@ -2,64 +2,59 @@
 <div class="modal fade" id="create-task-modal" tabindex="-1" aria-labelledby="createTaskModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
+
+      <!-- Modal Header -->
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="createTaskModalLabel">Create Task</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
+      <!-- Modal Body (Multi-Page) -->
       <div class="modal-body">
-        <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="taskTitle" placeholder="No Title">
-          <label for="questTitle">Quest Title</label>
+
+        <!-- Page 1: Task Info -->
+        <div id="modalPage1">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="taskTitle" placeholder="No Title">
+            <label for="taskTitle">Quest Title</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea class="form-control" id="taskDescription" placeholder="No Description" style="height: 100px"></textarea>
+            <label for="taskDescription">Quest Description</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input id="taskDueDate" type="date" class="form-control" placeholder="No Date">
+            <label for="taskDueDate">Date to complete by</label>
+          </div>
         </div>
-        <div class="form-floating mb-3">
-          <textarea type="text" class="form-control" id="taskDescription" placeholder="No Description" style="height: 100px"></textarea>
-          <label for="questDescription">Task Description</label>
-        </div>
-        <div class="form-floating mb-3">
-          <input id="taskDueDate" type="date" class="form-control" placeholder="No Date" id="datepicker">
-          <label for="datepicker">Date to complete by</label>
+
+        <!-- Page 2: Add Steps -->
+        <div id="modalPage2" style="display: none;">
+          <ol id="taskSteps"></ol>
+          <ul class="list-group-flush">
+            <li class="list-group-item align-items-center">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="stepBox" placeholder="No Title">
+                <label for="stepBox">Step <span id="stepNum">1</span></label>
+              </div>
+            </li>
+            <li class="list-group-item align-items-center">
+              <button id="addStep" type="button" class="btn btn-primary">Add Step <span style="color:var(--bs-form-valid-color)">+</span>
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
+
+      <!-- Modal Footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
-        <button id="nextButton" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskStepsModal">Next</button>
-        <!-- <button id="nextButton" type="button" class="btn btn-primary">Next</button> -->
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="prevButton" type="button" class="btn btn-outline-primary" style="display: none;">Back</button>
+        <button id="nextButton" type="button" class="btn btn-primary">Next</button>
+        <button id="createTaskButton" type="button" class="btn btn-success" style="display: none;" data-bs-dismiss="modal">Finish</button>
       </div>
     </div>
   </div>
 </div>
-<div class="modal fade" id="taskStepsModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="createTaskModalLabel">Add Steps</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body align-items-center">
-        <ol id="taskSteps">
-        </ol>
-        <ul class="list-group-flush">
-          <li class="list-group-item align-items-center">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="stepBox" placeholder="No Title">
-              <label for="questTitle">Step <span id="stepNum">1</span></label>
-            </div>
-          </li>
-          <li class="list-group-item align-items-center">
-            <button id="addStep" type="button" class="btn btn-primary">Add Step <span style="color:var(--bs-form-valid-color)">+</span>
-            </button>
-          </li>
-        </ul>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
-        <button id="createTaskButton" type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-primary">Finish</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 {% endblock %}

@@ -13,6 +13,16 @@
   </head>
 
   <body>
+    <nav class="navbar topbar">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{url_for("index")}}">Sidequest</a>
+        {% if current_user.is_authenticated %}
+        <div class="d-flex logoutbox">
+          <a class="fs-2 logout" href={{url_for("logout")}}>󰗽</a>
+        </div>
+        {% endif %}
+      </div>
+    </nav>
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% for category, message in messages %}

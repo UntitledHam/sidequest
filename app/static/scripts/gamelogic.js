@@ -20,6 +20,7 @@ const timeHistory = [];
 const targetFrameRate = 60;
 const saveInterval = 15000;
 const fpsValuesToAverage = 10; 
+const showFPSCounter = false;
 
 let save;
 
@@ -134,11 +135,43 @@ function validatePage1() {
   return true;
 }
 
-document.getElementById("nextButton").addEventListener("click", () => {
+const nextBtn = document.getElementById('nextButton');
+const prevBtn = document.getElementById('prevButton');
+const finishBtn = document.getElementById('createTaskButton');
+
+const page1 = document.getElementById('modalPage1');
+const page2 = document.getElementById('modalPage2');
+
+nextBtn.addEventListener('click', () => {
   if (!validatePage1()) {
     alert("Please fill out all of the fields.");
+    return;
   }
+  page1.style.display = 'none';
+  page2.style.display = 'block';
+  nextBtn.style.display = 'none';
+  finishBtn.style.display = 'inline-block';
+  prevBtn.style.display = 'inline-block';
 });
+
+prevBtn.addEventListener('click', () => {
+  page1.style.display = 'block';
+  page2.style.display = 'none';
+  nextBtn.style.display = 'inline-block';
+  finishBtn.style.display = 'none';
+  prevBtn.style.display = 'none';
+});
+
+// Always reset to Page 1 when modal opens
+const modal = document.getElementById('create-task-modal');
+modal.addEventListener('show.bs.modal', () => {
+  page1.style.display = 'block';
+  page2.style.display = 'none';
+  nextBtn.style.display = 'inline-block';
+  finishBtn.style.display = 'none';
+  prevBtn.style.display = 'none';
+});
+
 
 async function validatePage2() {
   return tempSteps.length > 0;
@@ -200,7 +233,7 @@ async function loadTasks() {
     }
     
     taskListElement.innerHTML += `
-      <li class="list-group-item border" style="border-radius: 0">
+      <li class="list-group-item border quest" style="border-radius: 0">
         <div class="container">
           <div class="row">
             <div class="col-sm-8">
@@ -277,13 +310,8 @@ async function loadTasks() {
           });
 
           await saveGame(true);
+          await loadTasks();
           showToast(`Congrats on completing "${stepElement.innerText}"!`, { type: "success" });
-
-          // Auto-complete if all steps done
-          if (save.data.tasks[x].completedsteps === save.data.tasks[x].steps.length) {
-            await loadTasks();
-            await saveGame(true);
-          }
         });
       }
     }
@@ -370,6 +398,7 @@ async function displayTask(task) {
 
   const content = `
     <p>${task.description}</p>
+    <h5 class="modal-title">Steps:</h5>
     ${stepContent}
   `;
 
@@ -404,7 +433,7 @@ async function displayTask(task) {
   const modalElement = document.getElementById(modalId);
   const bootstrapModal = new bootstrap.Modal(modalElement);
 
-  // Attach event listener AFTER modal is fully shown
+  // Attach event listener after modal is fully shown
   modalElement.addEventListener('shown.bs.modal', () => {
     const checkboxes = modalElement.querySelectorAll('.form-check-input');
     checkboxes.forEach(checkbox => {
@@ -577,7 +606,9 @@ async function render(interp) {
   pointsElement.innerText = pointsToDisplay;
   // pointsElement.getElementById("pointsInTooltip").innerText = pointsToDisplay;
   pointsPerSecondElement.innerText = `${await numberAbreviation(interpPPS * 1000)} satisfaction per second.`;
-  fpsCounterElement.innerText = `FPS: ${fps.toFixed(1)}`;
+  if (showFPSCounter) {
+    fpsCounterElement.innerText = `FPS: ${fps.toFixed(1)}`;
+  }
   lockBuildings();
 }
 
