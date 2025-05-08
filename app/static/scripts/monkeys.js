@@ -14,7 +14,7 @@ export class monkey extends building {
     }
 
     this.timeSinceLastWord += deltaTime;
-
+    // This is a deltaTime implimentation of giving points with a random chance each interval 
     if (this.timeSinceLastWord > this.interval && Math.random() < this.threshhold) {
       this.timeSinceLastWord -= this.interval;
       return this.bonus * this.numberOwned;

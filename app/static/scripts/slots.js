@@ -1,3 +1,5 @@
+// Unused class for later it is designed to be a high upside but inconsistant source of points
+
 import { building } from './building.js';
 export class slots extends building {
 

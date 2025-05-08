@@ -1,7 +1,7 @@
 import { skinnerBox } from './skinnerBox.js';
 import { Save } from "./save.js";
-import {monkey} from './monkeys.js';
-import {RPG} from './RPG.js';
+import { monkey } from './monkeys.js';
+import { RPG } from './RPG.js';
 import { fetchJson } from './jsonUtils.js';
 import { gup } from './gup.js';
 
@@ -10,7 +10,7 @@ let buildingJson;
 let buildings = new Map();
 
 
-let AbreviationList = ["Error","k","M","B","T","qd","Qn","sx","Sp","O","N","de","Ud","DD","tdD","qdD","QnD","sxD","SpD","OcD","NvD","Vgn","UVg","DVg","TVg","qtV","QnV","SeV","SPG","OVG","NVG","TGN","UTG","DTG","tsTG","qtTG","QnTG","ssTG","SpTG","OcTG","NoTG","QdDR","uQDR","dQDR","tQDR","qdQDR","QnQDR","sxQDR","SpQDR","OQDDr","NQDDr","qQGNT","uQGNT","dQGNT","tQGNT","qdQGNT","QnQGNT","sxQGNT","SpQGNT", "OQQGNT","NQQGNT","SXGNTL"];
+let AbreviationList = ["Error", "k", "M", "B", "T", "qd", "Qn", "sx", "Sp", "O", "N", "de", "Ud", "DD", "tdD", "qdD", "QnD", "sxD", "SpD", "OcD", "NvD", "Vgn", "UVg", "DVg", "TVg", "qtV", "QnV", "SeV", "SPG", "OVG", "NVG", "TGN", "UTG", "DTG", "tsTG", "qtTG", "QnTG", "ssTG", "SpTG", "OcTG", "NoTG", "QdDR", "uQDR", "dQDR", "tQDR", "qdQDR", "QnQDR", "sxQDR", "SpQDR", "OQDDr", "NQDDr", "qQGNT", "uQGNT", "dQGNT", "tQGNT", "qdQGNT", "QnQGNT", "sxQGNT", "SpQGNT", "OQQGNT", "NQQGNT", "SXGNTL"];
 
 
 const pointsHistory = [];
@@ -19,7 +19,7 @@ const timeHistory = [];
 // Config options
 const targetFrameRate = 60;
 const saveInterval = 15000;
-const fpsValuesToAverage = 10; 
+const fpsValuesToAverage = 10;
 const showFPSCounter = false;
 
 let save;
@@ -27,7 +27,7 @@ let save;
 
 
 
-const timeStep = 1000/targetFrameRate;
+const timeStep = 1000 / targetFrameRate;
 
 // For the Gameloop:
 let lastTime = null;
@@ -77,7 +77,7 @@ function addStep() {
   console.log(stepTextBox.value);
   stepNumberElement.innerText++;
   stepListElement.innerHTML += `<li>${stepTextBox.value}</li>`;
-  tempSteps.push([stepTextBox.value,  false]);
+  tempSteps.push([stepTextBox.value, false]);
   stepTextBox.value = "";
 }
 
@@ -91,12 +91,12 @@ async function createTask() {
     return;
   }
   let task = {};
-  task.title = taskTitleElement.value; 
+  task.title = taskTitleElement.value;
   task.duedate = dueDateElement.value;
   task.description = taskDescriptionElement.value;
   task.steps = tempSteps;
   task.completedsteps = 0;
-  task.completed = false;  
+  task.completed = false;
   task.award = await calculateAward(task.duedate, tempSteps.length);
   taskTitleElement.value = "";
   dueDateElement.value = "";
@@ -106,7 +106,7 @@ async function createTask() {
   stepListElement.innerHTML = "";
   stepNumberElement.innerText = "1";
   tempSteps = [];
-  await showToast("Sucessfully created quest!", {type: "success"});
+  await showToast("Sucessfully created quest!", { type: "success" });
   // Pass in true to hide the notification.
   await saveGame(true);
   await loadTasks();
@@ -116,7 +116,7 @@ async function createTask() {
 
 function validatePage1() {
   if (taskTitleElement.value == "") {
-    return false; 
+    return false;
   }
   else if (taskDescriptionElement.value == "") {
     return false;
@@ -148,8 +148,8 @@ nextBtn.addEventListener('click', () => {
   const dueDate = new Date(year, month - 1, day); // Use local midnight
   console.log(rightnow);
   console.log(dueDate);
-  rightnow.setHours(0,0,0,0);
-  dueDate.setHours(0,0,0,0);
+  rightnow.setHours(0, 0, 0, 0);
+  dueDate.setHours(0, 0, 0, 0);
   console.log(rightnow);
   console.log(dueDate);
 
@@ -193,7 +193,7 @@ async function loadTasks() {
   taskProgressElement.innerHTML = "";
 
   if (save.data.tasks.length == 0) {
-     taskProgressElement.innerHTML += `
+    taskProgressElement.innerHTML += `
       <div class="carousel-item active">
         <div class="container" style="width:70%">
           <h3><b>No Quests</b></h3>
@@ -241,7 +241,7 @@ async function loadTasks() {
         stepHtml += `<li><button id="task-${x}-step-${y}" class="btn invisible-btn step ${step[1] ? "disabled" : ""}">${step[0]}</button></li>`;
       }
     }
-    
+
     taskListElement.innerHTML += `
       <li class="list-group-item border quest" style="border-radius: 0">
         <div class="container">
@@ -260,7 +260,7 @@ async function loadTasks() {
         </div>
       </li>
     `;
-  
+
     let firstUncomplete = "";
     for (let step of task.steps) {
       if (!step[1]) {
@@ -270,7 +270,7 @@ async function loadTasks() {
     }
     const progress = Math.floor(100 * (task.completedsteps / task.steps.length));
     taskProgressElement.innerHTML += `
-      <div class="carousel-item ${taskProgressElement.innerHTML == "" ? "active":""}">
+      <div class="carousel-item ${taskProgressElement.innerHTML == "" ? "active" : ""}">
         <div class="container" style="width:70%">
           <h3><b>${task.title}</b></h3>
           <small class="fs-6">Next up: ${firstUncomplete}</small>
@@ -299,11 +299,11 @@ async function loadTasks() {
         if (!stepElement) continue;
 
         if (y == 0) {
-          stepElement.parentElement.parentElement.parentElement.parentElement.parentElement.addEventListener("click", async() => {
+          stepElement.parentElement.parentElement.parentElement.parentElement.parentElement.addEventListener("click", async () => {
             await displayTask(task);
           });
         }
-        
+
 
         stepElement.addEventListener("click", async () => {
           const stepData = save.data.tasks[x].steps[y];
@@ -332,14 +332,14 @@ async function loadTasks() {
 stepButtonElement.addEventListener("click", () => addStep());
 createTaskButtonElement.addEventListener("click", () => createTask());
 
-async function updatePps(deltaTime){
+async function updatePps(deltaTime) {
   // this tracks the points gained per second
   let len = pointsHistory.push(totalPoints);
-  if (len > 100){
+  if (len > 100) {
     await pointsHistory.shift();
   }
   let len2 = timeHistory.push(deltaTime);
-  if (len2 > 100){
+  if (len2 > 100) {
     await timeHistory.shift();
   }
   let num = 0;
@@ -349,9 +349,9 @@ async function updatePps(deltaTime){
     lastElement = element;
   });
   let timeSince = 0;
-  timeHistory.forEach(element => {timeSince += element;});
+  timeHistory.forEach(element => { timeSince += element; });
   oldPointsPerMS = pointsPerMS;
-  pointsPerMS = (num/(timeSince));
+  pointsPerMS = (num / (timeSince));
 }
 
 
@@ -411,7 +411,7 @@ async function displayTask(task) {
       const index = parseInt(checkbox.getAttribute('data-step-index'), 10);
       checkbox.addEventListener('change', async () => {
         task.steps[index][1] = checkbox.checked;
-        task.completedsteps += (checkbox.checked ? 1:-1);
+        task.completedsteps += (checkbox.checked ? 1 : -1);
         console.log(`Completed: ${task.completedsteps}`)
         console.log(`Step ${index} is now ${checkbox.checked}`);
         if (task.completedsteps == task.steps.length) {
@@ -439,54 +439,74 @@ async function displayTask(task) {
   });
 }
 
-function numberAbreviation(num){
+function numberAbreviation(num) {
   //This abbreviates the numbers across any order of magnitude
-  if (num<1000){
+  if (num < 1000) {
     return num.toFixed(1);
   }
   let truncatedNum = parseFloat(num.toPrecision(4));
   let expNum = truncatedNum.toExponential();
   let splitNumArray = expNum.split('e+');
-  return `${(splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4)}${AbreviationList[Math.round(splitNumArray[1]/3)]}`;
+  return `${(splitNumArray[0] * (10 ** (splitNumArray[1] % 3))).toPrecision(4)}${AbreviationList[Math.round(splitNumArray[1] / 3)]}`;
 }
 
 
-async function tutorial(){
+async function tutorial() {
   // This controls the players place in the tutorial
   const popoverInstance = bootstrap.Popover.getInstance(taskBox);
   if (!popoverInstance) {
     console.error("Popover instance not found for TaskBox!");
     return;
   }
-  
-  switch(tutorialSpot){
+
+  switch (tutorialSpot) {
     case 0:
       popoverInstance.show();
       tutorialSpot = 1;
       break;
     case 1:
-      if(buildings.get("skinnerbox").getNumOwned() >=1){
-        const tooltipContent = taskBox.getAttribute("data-tutorial-tooltip2");
-        popoverInstance.setContent({ '.popover-body': tooltipContent }); // Update the content
-        console.log('changing');
-        popoverInstance.show();
+      if (points != 0) {
+        const tooltipContent = taskBox.getAttribute("data-tutorial-tooltip");
+
+        // Update the content directly using the `tip` property
+        const popoverTip = popoverInstance.tip;
+        if (popoverTip) {
+          popoverTip.querySelector('.popover-body').innerHTML = tooltipContent;
+          popoverInstance.update(); // Recalculate the popover's position
+        }
+        console.log('Content updated and popover re-shown');
         tutorialSpot = 2;
       }
       break;
     case 2:
-      if(buildings.get("skinnerbox").getNumOwned() >=3){
-        console.log("Here Lol");
-        popoverInstance.hide();
+      if (buildings.get("skinnerbox").getNumOwned() >= 1) {
+        const tooltipContent = taskBox.getAttribute("data-tutorial-tooltip2");
+
+        // Update the content directly using the `tip` property
+        const popoverTip = popoverInstance.tip;
+        if (popoverTip) {
+          popoverTip.querySelector('.popover-body').innerHTML = tooltipContent;
+          popoverInstance.update(); // Recalculate the popover's position
+        }
+        console.log('Content updated and popover re-shown');
         tutorialSpot = 3;
       }
       break;
     case 3:
+      //popoverInstance.show();
+      if (buildings.get("skinnerbox").getNumOwned() >= 3) {
+        console.log("Here Lol");
+        popoverInstance.hide();
+        tutorialSpot = 4
+      }
+      break;
+    case 4:
       break;
     default:
       console.log("TutorialSpot error Value is " + tutorialSpot);
 
   }
-  
+
 }
 
 
@@ -495,7 +515,7 @@ async function loadTime() {
 
   if (time) {
     return parseFloat(time);
-  } 
+  }
   return 0;
 }
 
@@ -503,7 +523,7 @@ async function saveTime(time) {
   window.localStorage.setItem("total_time", time);
 }
 
-async function saveGame(silent=false) {
+async function saveGame(silent = false) {
   // Update the last save time so the auto save functionality can work
   timeOfLastSave = currentTime;
   // Send the save back to the backend.
@@ -512,7 +532,7 @@ async function saveGame(silent=false) {
   // if the save is silent, it won't display a notification to the user.
   // This is used to not show double notifications when a quest is completed. 
   if (!silent) {
-    await showToast("Game saved.", {type: "success"});
+    await showToast("Game saved.", { type: "success" });
   }
 }
 
@@ -530,7 +550,7 @@ async function gameLoop(time) {
   const deltaTime = currentTime - lastTime;
   accumulatedLag += deltaTime;
   lastTime = currentTime;
-  
+
   // Handle lag, so with lagspikes it doesn't mess up the PPS. 
   while (accumulatedLag >= timeStep) {
     accumulatedLag -= timeStep;
@@ -540,7 +560,7 @@ async function gameLoop(time) {
   // Calculates the estimated FPS given this one frame's frame time.
   fpsThisFrame = 1000 / deltaTime;
   frameCount++;
-  totalFPS+=fpsThisFrame;
+  totalFPS += fpsThisFrame;
   // Averages each frame's estimated FPS to get the actual frames per second.
   // The makes the number less jittery and more accurate. 
   if (frameCount >= fpsValuesToAverage) {
@@ -560,9 +580,9 @@ async function gameLoop(time) {
 
 async function updateBuildings(deltaTime) {
   for (let building of buildings.values()) {
-   let deltaPoints = building.update(deltaTime);
-   points += deltaPoints;
-   totalPoints += deltaPoints;
+    let deltaPoints = building.update(deltaTime);
+    points += deltaPoints;
+    totalPoints += deltaPoints;
   }
 }
 
@@ -590,8 +610,9 @@ async function updateGame(deltaTime, totalTime) {
   // Update the points. 
   oldPoints = points;
   save.data.points = points;
-  save.data.totalPoints = totalPoints;  
-  
+  save.data.totalPoints = totalPoints;
+  tutorial();
+
   await updatePps(deltaTime);
   await updateBuildings(deltaTime);
   // await tutorial();
@@ -697,7 +718,7 @@ async function buyBuilding(buildingKey) {
   const cost = building.getCost();
   if (points >= cost) {
     points -= cost;
-    setBuildingCount(buildingKey, building.getNumOwned()+1);
+    setBuildingCount(buildingKey, building.getNumOwned() + 1);
   }
 }
 
@@ -710,10 +731,10 @@ async function loadSave() {
     oldPoints = save.data.points;
     points = save.data.points;
     // Do the same with the total points.
-    if(save.data.hasOwnProperty("totalPoints")){
-    totalPoints = save.data.totalPoints;
+    if (save.data.hasOwnProperty("totalPoints")) {
+      totalPoints = save.data.totalPoints;
     }
-    else{
+    else {
       totalPoints = save.data.points;
     }
   }
@@ -725,18 +746,18 @@ async function loadSave() {
   }
   // The buildings to load from the save file.
   const buildingKeys = ["gup", "skinnerbox", "monkey", "rpg"]
-  
+
   // Check if each building is in the database, if not create it. 
   if (!save.data.hasOwnProperty("buildings")) { save.data.buildings = {}; }
   buildingKeys.forEach(buildingKey => {
     if (!save.data.buildings.hasOwnProperty(buildingKey)) {
-      save.data.buildings[buildingKey] = {"amount": 0}
+      save.data.buildings[buildingKey] = { "amount": 0 }
     }
   });
 
   // If tasks don't exist in the save file, make an empty list to store them in.
   if (!save.data.hasOwnProperty("tasks")) {
-    save.data.tasks = []; 
+    save.data.tasks = [];
     save.data.completedtasks = [];
   }
 

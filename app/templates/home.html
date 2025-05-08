@@ -5,6 +5,7 @@
 {% import "createTask.html" as taskModal %}
 {% import "tutorialTooltip.html" as tutorialTooltip %}
 {% import "tutorialTooltip2.html" as tutorialTooltip2 %}
+{% import "tutorialTooltipStart.html" as tutorialTooltipStart %}
 {% import "task.html" as t %}
 {% block content %}
 <div>
@@ -15,7 +16,8 @@
 
 
   <div class="container-fluid text-center" id="TaskBox" data-bs-toggle="popover" data-bs-html="true"
-    data-bs-trigger="manual" data-bs-placement="top" data-bs-content="{{tutorialTooltip}}" data-tutorial-tooltip2="{{ tutorialTooltip2 }}">
+    data-bs-trigger="manual" data-bs-placement="top" data-bs-contentp="{{tutorialTooltipStart}}"
+    data-tutorial-tooltip="{{tutorialTooltip}}" data-tutorial-tooltip2="{{ tutorialTooltip2 }}">
     <div class="row" style="height:10vh;"></div>
     <div class="row">
       <div class="col">
@@ -23,7 +25,8 @@
           <ul class="list-group d-flex flex-column gap-4" style="width:100%">
             <span id="tasks">
             </span>
-            <li data-bs-toggle="modal" data-bs-target="#create-task-modal" class="list-group-item list-group-item-action py-3 lh-sm user-select-none questbutton text-center border-top"
+            <li data-bs-toggle="modal" data-bs-target="#create-task-modal"
+              class="list-group-item list-group-item-action py-3 lh-sm user-select-none questbutton text-center border-top"
               style="border-radius:0px">Create Quest</li>
           </ul>
         </div>
