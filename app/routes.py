@@ -108,9 +108,24 @@ def updateSave():
 def getSave():
     return current_user.save
 
-@app.route("/wipeSave", methods=["GET", "POST"])
+@app.route("/wipesave", methods=["GET", "POST"])
 def wipesave():
     current_user.save = generate_new_save()
     db.session.commit()
 
-    return "Save Wiped"
+    return render_template("display_text.html", text = "Save Wiped")
+
+@app.route("/seesave", methods=["GET", "POST"])
+def seeSave():
+    return current_user.save
+
+
+@app.route("/getpoints", methods=["GET", "POST"])
+def getPoints():
+    current_user.save.update({"points":((current_user.save['points'] + 100) * 10)}) 
+    print(current_user.save["points"])
+    #db.session.add(current_user)
+    db.session.commit()
+
+    return render_template("display_text.html", text = f"points is now {current_user.save['points']}")
+

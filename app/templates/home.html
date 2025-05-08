@@ -2,6 +2,8 @@
 {% import "building.html" as b %}
 {% import "topbar.html" as topbar %}
 {% import "pointsTooltip.html" as pointsTooltip %}
+{% import "tutorialTooltip.html" as tutorialTooltip %}
+{% import "tutorialTooltip2.html" as tutorialTooltip2 %}
 {% import "task.html" as t %}
 {% block content %}
 <div>
@@ -14,7 +16,7 @@
 
 
   <div class="container-fluid text-center" id="TaskBox" data-bs-toggle="popover" data-bs-html="true"
-    data-bs-trigger="manual" data-bs-placement="top" data-bs-content="{{pointsTooltip}}">
+    data-bs-trigger="manual" data-bs-placement="top" data-bs-content="{{tutorialTooltip}}" data-tutorial-tooltip2="{{ tutorialTooltip2 }}">
     <div class="row" style="height:10vh;"></div>
     <div class="row">
       <div class="col">

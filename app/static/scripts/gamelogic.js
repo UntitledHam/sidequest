@@ -1,4 +1,4 @@
-import {skinnerBox} from './skinnerBox.js';
+import { skinnerBox } from './skinnerBox.js';
 import { Save } from "./save.js";
 import {monkey} from './monkeys.js';
 import {RPG} from './RPG.js';
@@ -59,6 +59,7 @@ let pointsPerSecondElement = document.getElementById("pointsPerSecond");
 let fpsCounterElement = document.getElementById("fpsDisplay");
 
 async function updatePps(deltaTime){
+  // this tracks the points gained per second
   let len = pointsHistory.push(totalPoints);
   if (len > 100){
     await pointsHistory.shift();
@@ -80,36 +81,48 @@ async function updatePps(deltaTime){
 }
 
 function numberAbreviation(num){
-  //console.log(num);
+  //This abbreviates the numbers across any order of magnitude
   if (num<1000){
     return num.toFixed(1);
   }
   let truncatedNum = parseFloat(num.toPrecision(4));
   let expNum = truncatedNum.toExponential();
   let splitNumArray = expNum.split('e+');
-  //console.log('Start Point');
-  //console.log(splitNumArray[0]);
-  //console.log((10**(splitNumArray[1]%3)));
-  //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))));
-  //console.log((splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4));
   return `${(splitNumArray[0] * (10**(splitNumArray[1]%3))).toPrecision(4)}${AbreviationList[Math.round(splitNumArray[1]/3)]}`;
 
 }
+
+
 async function tutorial(){
-  //console.log(document.getElementById("TaskBox"));
-  //console.log(bootstrap.Popover.getInstance(taskBox)); // Should not be null
+  // This controls the players place in the tutorial
+  const popoverInstance = bootstrap.Popover.getInstance(taskBox);
+  if (!popoverInstance) {
+    console.error("Popover instance not found for TaskBox!");
+    return;
+  }
+  
   switch(tutorialSpot){
     case 0:
-      bootstrap.Popover.getInstance(taskBox).show();
+      popoverInstance.show();
       tutorialSpot = 1;
       break;
     case 1:
       if(buildings.get("skinnerbox").getNumOwned() >=1){
-        bootstrap.Popover.getInstance(taskBox).hide();
+        const tooltipContent = taskBox.getAttribute("data-tutorial-tooltip2");
+        popoverInstance.setContent({ '.popover-body': tooltipContent }); // Update the content
+        console.log('changing');
+        popoverInstance.show();
         tutorialSpot = 2;
       }
       break;
     case 2:
+      if(buildings.get("skinnerbox").getNumOwned() >=3){
+        console.log("Here Lol");
+        popoverInstance.hide();
+        tutorialSpot = 3;
+      }
+      break;
+    case 3:
       break;
     default:
       console.log("TutorialSpot error Value is " + tutorialSpot);
@@ -311,9 +324,9 @@ async function loadBuildingCounts() {
   const buildingElements = document.querySelectorAll(".building");
 
   buildingElements.forEach(element => {
-    const amountElement = element.querySelector(".building-amount")
+    const amountElement = element.querySelector(".building-amount");
     const buildingId = element.getAttribute("id");
-    const costElement = element.querySelector(".building-cost")
+    const costElement = element.querySelector(".building-cost");
     amountElement.innerText = save.data.buildings[buildingId].amount;
     costElement.innerHTML = `<span style="color: var(--cost)">Cost:</span> ${numberAbreviation(buildings.get(buildingId).calculateCost())} satisfaction.`;
     element.addEventListener("click", async () => await buyBuilding(buildingId));
