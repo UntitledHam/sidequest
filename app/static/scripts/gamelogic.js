@@ -441,8 +441,7 @@ async function displayTask(task) {
 function numberAbreviation(num){
   //console.log(num);
   if (num<1000){
-    const abr = num.toFixed(1);
-    return abr % 1 == 0 ? num.toFixed(0) : abr;
+    return num.toFixed(1);
   }
   let truncatedNum = parseFloat(num.toPrecision(4));
   let expNum = truncatedNum.toExponential();
