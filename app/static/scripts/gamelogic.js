@@ -462,10 +462,12 @@ async function tutorial() {
   switch (tutorialSpot) {
     case 0:
       popoverInstance.show();
+      console.log("showing tutorial popover")
       tutorialSpot = 1;
       break;
     case 1:
-      if (points != 0) {
+    console.log("Getting Here");
+    if (points != 0) {
         const tooltipContent = taskBox.getAttribute("data-tutorial-tooltip");
 
         // Update the content directly using the `tip` property
