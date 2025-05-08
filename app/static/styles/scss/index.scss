@@ -90,6 +90,7 @@ $crust: #11111b;
   --bs-form-valid-border-color: #{$green};
   --bs-form-invalid-color: #{$red};
   --bs-form-invalid-border-color: #{$red};
+  --bs-btn-hover-bg: #{$surface0};
 
   --cost: #{$yellow};
 }
@@ -152,7 +153,7 @@ $crust: #11111b;
   cursor: pointer;
 
   &:hover {
-    background-color: #{$lavender};
+    background-color: #{$surface1};
     color: #{$text};
   }
 }
@@ -208,4 +209,25 @@ $crust: #11111b;
 .logintitle {
   font-weight: bold;
   color: #{$text} !important;
+}
+
+.quest {
+  &:hover {
+    background: #{$surface0};
+  }
+}
+
+.awardstext {
+  color: #{$green};
+  font-weight: bold;
+}
+
+.awardamount {
+  color: #{$lavender};
+}
+
+.stylebutton {
+  &:hover {
+    background: #{$surface0} !important;
+  }
 }

@@ -228,6 +228,7 @@
   --bs-form-valid-border-color: #a6e3a1;
   --bs-form-invalid-color: #f38ba8;
   --bs-form-invalid-border-color: #f38ba8;
+  --bs-btn-hover-bg: #313244;
   --cost: #f9e2af; }
 
 .btn {
@@ -266,7 +267,7 @@
   transition: background-color 0.3s, color 0.3s;
   cursor: pointer; }
   .invisible-btn:hover {
-    background-color: #b4befe;
+    background-color: #45475a;
     color: #cdd6f4; }
 
 .topbar {
@@ -310,3 +311,16 @@
 .logintitle {
   font-weight: bold;
   color: #cdd6f4 !important; }
+
+.quest:hover {
+  background: #313244; }
+
+.awardstext {
+  color: #a6e3a1;
+  font-weight: bold; }
+
+.awardamount {
+  color: #b4befe; }
+
+.stylebutton:hover {
+  background: #313244 !important; }
