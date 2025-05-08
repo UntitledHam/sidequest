@@ -97,7 +97,6 @@ def error404(e):
 def updateSave():
     print("Attempting to recieve save file.")
     data = request.get_json()
-    print(data["points"])
     current_user.save = data
     db.session.commit()
 

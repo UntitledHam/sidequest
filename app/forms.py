@@ -7,18 +7,18 @@ from app.models import User
 
 
 class Login(FlaskForm):
-    username = StringField("Username: ", validators=[DataRequired()])
-    password = PasswordField("Password: ", validators=[DataRequired()])
+    username = StringField("Username: ", validators=[DataRequired()], render_kw={"class": "form-control", "placeholder": "Username", "type": "text"})
+    password = PasswordField("Password: ", validators=[DataRequired()], render_kw={"class": "form-control", "placeholder": "Password", "type": "password"})
     remember_me = BooleanField('Remember Me')
-    submit = SubmitField("Login")
+    submit = SubmitField("Login", render_kw={"class": "btn btn-primary w-100 stylebutton"})
 
 
 class Register(FlaskForm):
-    username = StringField("Username: ", validators=[DataRequired()])
-    email = StringField("Email: ", validators=[DataRequired(), validators.Email()])
-    password = PasswordField("Password: ", validators=[DataRequired()])
-    password2 = PasswordField('Repeat Password', validators=[DataRequired(), validators.EqualTo('password')])
-    submit = SubmitField("Submit")
+    username = StringField("Username: ", validators=[DataRequired()], render_kw={"class": "form-control", "placeholder": "Username", "type": "text"})
+    email = StringField("Email: ", validators=[DataRequired(), validators.Email()], render_kw={"class": "form-control", "placeholder": "Email", "type": "email"})
+    password = PasswordField("Password: ", validators=[DataRequired()], render_kw={"class": "form-control", "placeholder": "Password", "type": "password"})
+    password2 = PasswordField('Repeat Password', validators=[DataRequired(), validators.EqualTo('password')], render_kw={"class": "form-control", "placeholder": "Password", "type": "password"})
+    submit = SubmitField("Submit", render_kw={"class": "btn btn-primary w-100 stylebutton"})
 
     def validate_username(self, field):
         if db.session.query(User).where(User.username == field.data).first() is not None:

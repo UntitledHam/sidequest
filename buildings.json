@@ -14,13 +14,13 @@
   "monkey": {
     "name": "Monkey",
     "description": "A monkey with a typewriter.", 
-    "complexDescription": "todo",
-    "baseCost": 1000
+    "complexDescription": "This monkey generates satisfaction at random when it completes one of it's great works.",
+    "baseCost": 10000
   },
   "rpg": {
     "name": "RPG",
-    "description": "An RPG or something idk",
-    "complexDescription": "todo",
-    "baseCost": 5000
+    "description": "The new hit roleplaying game.",
+    "complexDescription": "Satisfaction gained fluctuates in a sinewave because of player uptime.",
+    "baseCost": 50000
   }
 }

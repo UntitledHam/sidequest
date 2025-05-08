@@ -1,4 +1,5 @@
 @import "node_modules/bootstrap/scss/functions";
+@import "https://www.nerdfonts.com/assets/css/webfont.css";
 
 // Palette colors
 $rosewater: #f5e0dc;
@@ -28,8 +29,6 @@ $base: #1e1e2e;
 $mantle: #181825;
 $crust: #11111b;
 
-$btn-disabled-color: $sky;
-
 // Required
 @import "node_modules/bootstrap/scss/variables";
 @import "node_modules/bootstrap/scss/variables-dark";
@@ -37,8 +36,7 @@ $btn-disabled-color: $sky;
 @import "node_modules/bootstrap/scss/mixins";
 @import "node_modules/bootstrap/scss/root";
 
-
-[data-bs-theme=mocha] {
+[data-bs-theme="mocha"] {
   color-scheme: dark;
   --bs-body-color: #{$text};
   --bs-body-color-rgb: #{to-rgb($text)};
@@ -50,7 +48,7 @@ $btn-disabled-color: $sky;
   --bs-secondary-color-rgb: #{to-rgb($sky)};
   --bs-secondary-bg: #{$surface0};
   --bs-secondary-bg-rgb: #{to-rgb($surface0)}
-  --bs-tertiary-color: rgba(222, 226, 230, 0.5);
+    --bs-tertiary-color: rgba(222, 226, 230, 0.5);
   --bs-tertiary-color-rgb: 222, 226, 230;
   --bs-tertiary-bg: #{$surface0};
   --bs-tertiary-bg-rgb: 43, 48, 53;
@@ -76,11 +74,11 @@ $btn-disabled-color: $sky;
   --bs-info-border-subtle: #087990;
   --bs-warning-border-subtle: #997404;
   --bs-danger-border-subtle: #842029;
-  --bs-light-border-subtle: #495057;
-  --bs-dark-border-subtle: #343a40;
+  --bs-light-border-subtle: #{$crust};
+  --bs-dark-border-subtle: #{$crust};
   --bs-heading-color: inherit;
   --bs-link-color: #{$sky};
-  --bs-link-hover-color: #{$blue};
+  --bs-link-hover-color: #{$mauve};
   --bs-link-color-rgb: 110, 168, 254;
   --bs-link-hover-color-rgb: 139, 185, 254;
   --bs-code-color: #e685b5;
@@ -92,13 +90,14 @@ $btn-disabled-color: $sky;
   --bs-form-valid-border-color: #{$green};
   --bs-form-invalid-color: #{$red};
   --bs-form-invalid-border-color: #{$red};
+  --bs-btn-hover-bg: #{$surface0};
 
-  --cost: #{$yellow}
+  --cost: #{$yellow};
 }
 
 .btn {
   background-color: #{$base};
-  border-color:#{$mauve} !important;
+  border-color: #{$mauve} !important;
   border-width: 2px !important;
   border-radius: 0px !important;
   color: #{$text};
@@ -113,7 +112,7 @@ $btn-disabled-color: $sky;
   }
   &:disabled {
     background-color: #{$crust} !important;
-    border-color: #{$red} !important;  
+    border-color: #{$red} !important;
   }
 }
 
@@ -136,7 +135,99 @@ $btn-disabled-color: $sky;
   background-color: #{$mauve};
 }
 
-// * {
-//   background: $base;
-//   color: $text;
-// }
+.step {
+  &.disabled {
+    color: #{$surface1};
+    text-decoration: line-through;
+  }
+}
+.invisible-btn {
+  background-color: transparent;
+  color: #{$lavender};
+  text-decoration: underline;
+  border: none;
+  // padding: 0.5rem 1.5rem;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #{$surface1};
+    color: #{$text};
+  }
+}
+
+.topbar {
+  background-color: transparent !important;
+}
+
+.navbar-brand {
+  color: #{$lavender} !important;
+  font-weight: bold;
+  font-size: 200%;
+}
+
+.logoutbox {
+  padding-right: 1%;
+}
+
+.logout {
+  font-weight: bold;
+  color: #{$green};
+  text-decoration: none;
+}
+
+.questbutton {
+  background-color: #{$mauve};
+  color: #{$base};
+  font-weight: bold;
+  border: solid !important;
+  border-width: 2px;
+  border-color: #{$peach}
+
+  &:hover{
+    background-color: darken($mauve, 10%);
+    color: darken($base, 10%);
+  }
+}
+
+.quest {
+  border: solid !important;
+  border-width: 2px;
+  border-color: #{$flamingo} !important;
+}
+
+.yellow {
+  color: #{$yellow};
+}
+
+.primarytext {
+  color: #{$text};
+}
+
+.logintitle {
+  font-weight: bold;
+  color: #{$text} !important;
+}
+
+.quest {
+  &:hover {
+    background: #{$surface0};
+  }
+}
+
+.awardstext {
+  color: #{$green};
+  font-weight: bold;
+}
+
+.awardamount {
+  color: #{$lavender};
+}
+
+.stylebutton {
+  &:hover {
+    background: #{$surface0} !important;
+  }
+}

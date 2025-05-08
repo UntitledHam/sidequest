@@ -15,6 +15,7 @@ export class Save {
   }
 
   async sendSave() {
+    // Sends the save json file back to the backend.
     console.log(this.data);
     await sendJson("/updatesave", this.data);
   }
